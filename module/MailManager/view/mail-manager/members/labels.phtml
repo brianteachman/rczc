@@ -1,0 +1,32 @@
+    <section>
+        <h2 align="center">Prepare Mailing Labels for Red Cedar Zen Community</h2>
+
+        <form method="post" action="/member/labels" name="mailing.labels" id="MailingLabels">
+            
+            <p>Prepare Mailing Labels for: <br>
+            <input id="NewsletterRadio" type="radio" name="mailing.type" value="newsletter_label"><label for="NewsletterRadio">Members</label> - Members only, e.g. for Newsletter mailing <br>
+
+            <input id="AllAddressesRadio" type="radio" name="mailing.type" value="all_addresses"><label for="AllAddressesRadio">All</label> - Everyone for whom we have an address <br>
+
+            <p>
+                <input type="submit" name="submit.labels" value="Prepare Labels" id="PrepareLabelsButton">
+            </p>
+
+        </form>
+
+        <?php if ($_POST['submit']) ?>
+        <!-- Toogle after form submission -->
+        <div id="ResultsLabel">
+            <p>Opening new browser window containing these labels: <br>
+                36 U.S. labels <br>
+                2 Non-U.S. (Canada &amp; Mexico) labels <br>
+                (38 total trifold pieces.) <br>
+                12 Dharma Center labels. <br>
+                <b>50 total mailing labels.</b>
+            <p>
+
+            <p>(NOTE: Popup blockers can prevent this window from opening)</p>
+        </div><!-- #ResultsLabel -->
+        <?php endif; ?>
+
+    </section>

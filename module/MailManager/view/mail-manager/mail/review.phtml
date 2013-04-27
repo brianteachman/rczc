@@ -1,0 +1,93 @@
+<?php
+
+$title = 'Send Email Announcement for Red Cedar Zen Community';
+$this->headTitle($title);
+
+//$this->headScript()->prependFile($this->basePath() . 'somefile.js');
+
+//var_dump($this->message);
+
+?>
+
+<form name="ReviewForm" method="post" action="">
+
+    <h1 align="center"><?= $title ?></h1>
+
+    <section>
+
+        <div id="ResultsMessageLabel">
+            <p>Message will be sent to: <br>
+            TO: <!-- --><?= $this->member->getFullName() ?> (<?= $this->member->email ?>)<!-- --> <br>
+            and cc sent to mailings@sanghasoftware.com</p>
+
+            <hr>
+        </div>
+        
+        <div id="Message">
+            <p><em><b>Subject</b></em>: <!-- message.subject --><?= $this->message['message_subject'] ?><!-- message.subject --></p>
+
+            <p><em><b>Message</b></em>:</p>
+
+            <!-- email.message start -->
+            <?= $this->message['message_content'] ?>
+            <!-- email.message end -->
+
+            <?php if (isset($this->option['proofing'])): ?>
+            <!-- member.info start -->
+            <hr>
+            <table border='0' width=100%>
+                <tr>
+                    <td>
+                        <b><!-- --><?= $this->member->getFullName() ?><!-- --></b> <br>
+                        <span class="smalltext">
+                            Volunteering: <!-- --><?= $this->member->current_role ?><!-- --> <br>
+                            Interested in: <!-- --><?= $this->member->volunteer_interest ?><!-- -->
+                        </span>
+                    </td>
+                    <td>
+                        <span class="smalltext">
+                            <i>home:</i> <?= $this->member->home_phone ?> <br>
+                            <?= $this->member->email ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="smalltext">
+                            <?= $this->member->getAddress(true) ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="smalltext"><?= $this->member->membership_type ?></span>
+                    </td>
+                </tr>
+            </table>
+            <!-- member.info end -->
+            <?php endif; ?>
+
+            <?php if (isset($this->option['tax_receipt'])): ?>
+            <!-- tax.receipt start -->
+            <hr>
+            <div>
+                This message is from the Red Cedar Zen Community. <br>
+                For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->option['tax_year'] ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
+            <div>
+            <!-- tax.receipt end -->
+            <?php endif; ?>
+
+            <hr>
+            <div style="font-size:x-small;">
+                This message is from the Red Cedar Zen Community. <br>
+                More information is available at <a href='http://www.redcedarzen.org/'>www.redcedarzen.org</a> <br>
+
+                For membership information or mailing list questions write to <a href='mailto:info@redcedarzen.org'>info@redcedarzen.org</a> <br>
+
+                To register for a retreat write to <a href='mailto:registrar@redcedarzen.org'>registrar@redcedarzen.org</a> <br>
+
+                To reach resident priest Nomon Tim Burnett write to <a href='mailto:tim@redcedarzen.org'>tim@redcedarzen.org</a>
+            </div>
+            
+            <br>
+
+            <span>[This message sent to <?= $this->member->email ?>]</span>
+        </section>
+
+    </form>

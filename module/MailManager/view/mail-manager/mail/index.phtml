@@ -1,0 +1,20 @@
+<?php
+
+$title = 'Send Email Announcement for Red Cedar Zen Community';
+$this->headTitle($title);
+
+$this->headScript()->prependFile($this->basePath() . '/tinymce/tinymce.min.js');
+?>
+<script type="text/javascript">
+tinyMCE.init({
+        mode : "textareas"
+});
+</script>
+
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<hr>
+
+<p>To send a message to an individual person using this system, go to the <a href="<?php echo $this->url('members', array('action'=>'index'));?>">Members List</a> and click on the person's email address.</p>
+
+<p>To send a message to a group persons using this system, use to the <a href="<?php echo $this->url('mail', array('action'=>'new'));?>">Group Mailer</a>.</p>
