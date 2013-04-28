@@ -19,9 +19,4 @@ class IndexController extends AbstractActionController
         //$this->layout('layout/home'); // via __invoke()
         return array();
     }
-
-    public function listContactsAction()
-    {
-        return array();
-    }
 }

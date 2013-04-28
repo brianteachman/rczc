@@ -1,7 +1,17 @@
+<?php $this->headStyle()->captureStart() ?>
+#search_box {
+    margin: .24em 1em 0 0;
+    vetical-align: middle;
+}
+#search_box input { padding: .5em; }
+#search_box input[type=text] {
+    1width: 250px;
+}
+<?php $this->headStyle()->captureEnd() ?>
                 <div class="menu-header">
                     <ul id="menu-red-cedar-menu" class="menu">
                         <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item current-menu-ancestor current-menu-parent current_page_parent current_page_ancestor">
-                            <a href="/">Members</a>
+                            <a href="<?php $this->basePath() ?>/members">Members</a>
                             <ul class="sub-menu">
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item"><a href="<?php $this->basePath() ?>/members/add">Add member</a></li>
                             </ul>
@@ -11,9 +21,6 @@
                             <ul class="sub-menu">
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-842">
                                     <a href="<?php $this->basePath() ?>/mail/new">New Message</a>
-                                </li>
-                                <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                    <a href="#">Email Templates</a>
                                 </li>
                             </ul>
                         </li>
@@ -26,14 +33,10 @@
                                 </li>
                             </ul>
                         </li>
-
-                        <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                            <a href="#">Admin</a>
-                            <ul class="sub-menu">
-                                <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                    <a href="#">About Zen</a>
-                                </li>
-                            </ul>
-                        </li>
                     </ul>
+
+                    <form action="/members" method="get" id="member_search" style="float:right;">
+                        <input type="search" name="search">
+                        <input type="submit" value="Search">
+                    </form>
                 </div>

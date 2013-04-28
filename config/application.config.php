@@ -8,9 +8,10 @@
 return array(
     'modules' => array(
         'Application',
-        'MailManager',
         'ZfcBase',
         'ZfcUser',
+        'Member',
+        'Mailer',
         ),
     'module_listener_options' => array(
         'module_paths' => array(

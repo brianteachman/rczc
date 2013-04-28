@@ -1,0 +1,90 @@
+<?php
+// module/member/view/album/album/index.phtml:
+
+$title = 'Sangha members';
+$this->headTitle($title);
+?>
+<?php $this->headStyle()->captureStart() ?>
+.picker-bar > form {
+    width: 100%;
+}
+.picker > input {
+    1color: Black;
+    1background-color: LightCyan;
+    border: solid 1px gray;
+    width: 30px;
+}
+.picker > input.selected {
+     color: White;
+     background-color: Gray;
+}
+<?php $this->headStyle()->captureEnd();
+?>
+<h1><?php echo $this->escapeHtml($title); ?> (<?= count($members) ?> total)</h1>
+<hr>
+
+<div class="picker-bar">
+    <form id="Picker" class="picker">
+        <input type="submit" name="picker" value="" class="selected">
+        <input type="submit" name="picker" value="?">
+        <input type="submit" name="picker" value="A">
+        <input type="submit" name="picker" value="B">
+        <input type="submit" name="picker" value="C">
+        <input type="submit" name="picker" value="D">
+        <input type="submit" name="picker" value="E">
+        <input type="submit" name="picker" value="F">
+        <input type="submit" name="picker" value="G">
+        <input type="submit" name="picker" value="H">
+        <input type="submit" name="picker" value="I">
+        <input type="submit" name="picker" value="J">
+        <input type="submit" name="picker" value="K">
+        <input type="submit" name="picker" value="L">
+        <input type="submit" name="picker" value="M">
+        <input type="submit" name="picker" value="N">
+        <input type="submit" name="picker" value="O">
+        <input type="submit" name="picker" value="P">
+        <input type="submit" name="picker" value="Q">
+        <input type="submit" name="picker" value="R">
+        <input type="submit" name="picker" value="S">
+        <input type="submit" name="picker" value="T">
+        <input type="submit" name="picker" value="U">
+        <input type="submit" name="picker" value="V">
+        <input type="submit" name="picker" value="W">
+        <input type="submit" name="picker" value="Y">
+        <input type="submit" name="picker" value="Z">
+    </form>
+
+    <?php /*<small><a href="<?php echo $this->url('members', array('action'=>'add'));?>">Add New</a></small> */ ?>
+</div>
+
+<table class="table">
+<?php /*
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone #</th>
+    <th>Address</th>
+    <th>Country</th>
+    <th>&nbsp;</th>
+</tr>
+*/ ?>
+<?php foreach ($members as $member) : ?>
+<tr id="<?php echo $this->escapeHtml($member->id) ?>">
+    <td><?php echo $this->escapeHtml($member->getFullName()) ?></td>
+    <td>
+        <a href="<?php echo $this->url('mail', array('action'=>'new', 'id'=>$member->id));?>"><?php echo $this->escapeHtml($member->email);?></a>
+    </td>
+    <td>
+        <?php echo $this->escapeHtml($member->home_phone);?>
+    </td>
+    <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
+    <td><?php echo $this->escapeHtml($member->country);?></td>
+    <td>
+        <a href="<?php echo $this->url('members',
+            array('action'=>'edit', 'id' => $member->id));?>">Edit</a>
+        <a href="<?php echo $this->url('members',
+            array('action'=>'delete', 'id' => $member->id));?>">Delete</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>
