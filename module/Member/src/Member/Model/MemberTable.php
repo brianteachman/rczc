@@ -31,6 +31,32 @@ class MemberTable
         return $row;
     }
 
+    /**
+     * Return ResultSet of all of opted-in or members.
+     * 
+     * @param  string $type Either 'sangha' or 'members'
+     * @return Zend\Db\ResultSet   
+     */
+    public function getDirectoryMembers($type)
+    {
+        // "SELECT * FROM `members` WHERE {$sel};"
+        if ($type == 'sangha') {
+            $sel = array('list_in_directory' => 1);
+        } elseif ($type == 'members') {
+            $sel = array('membership_type' => 3);
+        } else {
+            //
+        }
+        $rowset = $this->tableGateway->select(function (Select $select) use ($sel) {
+             $select->where($sel);
+             $select->order('last_name ASC');
+        });
+        if (!$rowset) {
+            throw new \Exception("Could not run the query {$q}.");
+        }
+        return $rowset;
+    }
+
     public function getStartsWith($letter)
     {
         $rowset = $this->tableGateway->select(function (Select $select) use ($letter) {

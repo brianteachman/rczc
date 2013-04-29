@@ -134,4 +134,42 @@ class MembersController extends AbstractActionController
             'member' => $this->getMemberTable()->getMember($id)
         );
     }
+
+    public function directoryAction()
+    {
+        //
+    }
+
+    public function directoryViewAction()
+    {
+        if (isset($_POST['list_type'])) {
+            $type = $_POST['list_type'];
+            if ($type == 'sangha') {
+                $members = $this->getMemberTable()->getDirectoryMembers($type);
+                $title = "Sangha Directory - " . count($members) . ' members';
+            } elseif ($type == 'members') {
+                $members = $this->getMemberTable()->getDirectoryMembers($type);
+                $title = "Membership List (Board use only) - " . count($members) . ' members';
+            } else {
+                $members = $this->getMemberTable()->fetchAll();
+                $title = "Full Mailing List (Board use only) - " . count($members) . ' members';
+            }
+        }
+
+        return new ViewModel(array(
+            'members' => $members,
+            'title' => $title,
+        ));
+    }
+
+    public function labelsAction()
+    {
+        if (isset($_POST['prepare'])) {
+            $type = $_POST['mailing_type'];
+            unset($_POST);
+            return new ViewModel(array(
+                'address_list' => $type,
+            ));
+        }
+    }
 }

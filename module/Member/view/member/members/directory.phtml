@@ -1,0 +1,20 @@
+    <section>
+        <h2 align="center">Prepare Sangha Directory (phone list) for Red Cedar Zen Community</h2>
+
+        <form method="post" action="/members/directory-view" name="sangha.directory" id="sangha_directory">
+            <p>Prepare Directory for:
+                <br>    
+                <input id="SanghaListRadio" type="radio" name="list_type" value="sangha" checked="checked" /><label for="SanghaListRadio">SANGHA DIRECTORY - Members who have opted in for this.</label>
+
+                <br> 
+                <input id="AllMembersRadio" type="radio" name="list_type" value="members" /><label for="AllMembersRadio">MEMBERSHIP LIST - All Members and Friends (for Board use)</label>
+
+                <br>
+                <input id="FullListRadio" type="radio" name="list_type" value="all" /><label for="FullListRadio">FULL LIST - Entire mailing list (for Board use)</label>
+            </p>
+            <p>
+                <input type="submit" name="submit.phonelist" value="Get Phone List">
+            </p>
+        </form>
+
+    </section>

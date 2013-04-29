@@ -1,0 +1,48 @@
+    <section id="PhoneListLabel">
+        
+        <!-- <div>Red Cedar Zen Community - Sangha Directory - printed 4/18/2013</div> -->
+        <div align='center'>Red Cedar Zen Community - <?= $this->title ?> - printed 4/18/2013</div>
+        <!-- <div>Red Cedar Zen Community - Full Mailing List (Board use only) - printed 4/18/2013</div> -->
+
+
+        <div>&nbsp;</div>
+
+        <table border=0 width=100%>
+            <tr>
+                <td><b>Name</b></td>
+                <td><b>Phone &amp; Email</b></td>
+                <td><b>Address</b></td>
+                <td><b>Membership</b></td>
+            </tr>
+
+            <?php foreach ($this->members as $member): ?>
+            <tr style='page-break-inside : avoid;'>
+                <td>
+                    <b><?= $member->getFullName() ?></b> <br>
+                    <?php if ($member->volunteer_interests): ?>
+                    Interested in: <?= $member->volunteer_interests ?>
+                    <?php endif; ?>
+                </td>
+                <td class="smalltext">
+                    <?php if ($member->home_phone): ?>
+                    Home: <?= $member->home_phone ?>
+                    <?php endif; ?>
+                    <?php if ($member->work_phone): ?>
+                    Work: <?= $member->work_phone ?>
+                    <?php endif; ?>
+                    <?= $member->email ?>
+                </td>
+                <td class="smalltext">
+                    <?php if ($member->getAddress()): ?>
+                    <?= $member->getAddress() ?> <br>
+                    <?= $member->country ?>
+                    <?php endif; ?>
+                </td>
+                <td class="smalltext">
+                    <?= $member->membership_type == 3 ? 'Member': 'Friend'; ?>
+                </td>
+            </tr>
+
+            <?php endforeach; ?>
+        </table>
+    </section>
