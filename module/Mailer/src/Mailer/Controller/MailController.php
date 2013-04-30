@@ -128,6 +128,13 @@ class MailController extends AbstractController
             ));
         }
 
+        $html_view = new ViewModel(array(
+            'to'=> $email['to'],
+            'message'=> $email['message'],
+            'member'=> $email['member'],
+            'option'=> $email['option']
+        ));
+        $html_view->setTemplate('email/group-email');
         $view->setTerminal(true);
         return $view;
     }
