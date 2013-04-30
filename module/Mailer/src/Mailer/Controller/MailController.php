@@ -3,6 +3,7 @@
 namespace Mailer\Controller;
 
 use TWeb\Controller\AbstractController;
+use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Model\ViewModel;
 use Member\Model\Member;
 
