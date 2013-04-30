@@ -56,11 +56,11 @@ tinyMCE.init({
                 
                 <input type="radio" name="send_to" value="friends" id="friends"><label for="friends">Friends</label>
 
-                <input type="radio" name="send_to" value="members_and_friends" id="members+friends"><label for="members+friends">Members + Friends</label>
+                <input type="radio" name="send_to" value="members_and_friends" id="members+friends"><label for="members+friends">Members &amp; Friends</label>
 
                 <input type="radio" name="send_to" value="non_members" id="non_members"><label for="non_members">Non-Members (on mailing list only)</label>
 
-                <input type="radio" name="send_to" value="all_members" id="all_members"><label for="all_members">All (everyone: members, friends &amp; non-members)</label>
+                <input type="radio" name="send_to" value="everyone" id="everyone"><label for="all_members">Everyone (members, friends &amp; non-members)</label>
                 <br>
                 
             <em>Location:</em>
@@ -105,7 +105,7 @@ tinyMCE.init({
         <p>NOTE: To send a message to an individual person using this system, go to the <a href="<?php echo $this->url('members', array('action'=>'index'));?>">Mailing List</a> and click on the person's email address.</p>
 
         <div class="center">
-            <input type="submit" name="action" value="send_message">
+            <input type="submit" name="action" value="Review Message">
         </div>
     </div>
 

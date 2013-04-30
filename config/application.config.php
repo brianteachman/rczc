@@ -10,6 +10,7 @@ return array(
         'Application',
         'ZfcBase',
         'ZfcUser',
+        'TWeb',
         'Member',
         'Mailer',
         ),

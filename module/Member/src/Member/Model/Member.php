@@ -66,6 +66,28 @@ class Member implements InputFilterAwareInterface
         );
     }
 
+    public function getMemberType()
+    {
+        switch ($this->membership_type) {
+            case '1':
+                $type = 'Mailing List Only';
+                break;
+
+            case '2':
+                $type = 'Friend of Red Cedar';
+                break;
+
+            case '3':
+                $type = 'Member';
+                break;
+            
+            default:
+                $type = 'Dharma Center';
+                break;
+        }
+        return $type;
+    }
+
     /**
      * Zend\Stdlib\Hydrator\ArraySerializable contract method
      * 
