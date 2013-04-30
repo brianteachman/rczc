@@ -134,7 +134,7 @@ class MailController extends AbstractController
             'member'=> $email['member'],
             'option'=> $email['option']
         ));
-        $view->setTemplate('email/group-email');
+        $view->setTemplate('mailer/mail/email-review');
         $view->setTerminal(true);
         return $view;
     }
