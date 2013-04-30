@@ -119,16 +119,22 @@ class MailController extends AbstractController
             'option'=> $session['option']
         );
 
-        if ($_POST['action'] == 'Send') {
-            $this->sendMessageToMember($member, $email['message']);
+        if (isset($_POST['action']) && $_POST['action'] == 'Send') {
+
+            $this->sendMessageToMember($member, $email);
+
+            return $this->redirect()->toRoute('mail', array(
+                'action' => 'sent'
+            ));
         }
 
-        return array(
-            'to'=> $email['to'],
-            'message'=> $email['message'],
-            'member'=> $email['member'],
-            'option'=> $email['option']
-        );
+        $view->setTerminal(true);
+        return $view;
+    }
+
+    public function sentAction()
+    {
+        //
     }
 
     /**
@@ -137,7 +143,7 @@ class MailController extends AbstractController
      * @param  Member   $member  \Member\Model\Member
      * @param  string[] $message Array containing elements of the message.
      */
-    protected function sendMessageToMember(Member $member, $message)
+    protected function sendMessageToMember(Member $member, $email)
     {
         $header_meta = array(
            'from' => 'mailings@sanghasoftware.com',
@@ -147,17 +153,34 @@ class MailController extends AbstractController
            //'to' => $member->email,
            'to' => 'mr.teachman@gmail.com',
            'to_name' => $member->getFullName(),
-           'subject' => $message['message_subject'],
+           'subject' => $email['message']['message_subject'],
         );
 
-        $plain_text_message = strip_tags($message['message_content']);
+        $html_view = new ViewModel(array(
+            'to'=> $email['to'],
+            'message'=> $email['message'],
+            'member'=> $email['member'],
+            'option'=> $email['option']
+        ));
+        $html_view->setTemplate('email/group-email');
+
+        $email['message']['message_content'] = strip_tags($email['message']['message_content']);
+        $text_view = new ViewModel(array(
+            'to'=> $email['to'],
+            'message'=> $email['message'],
+            'member'=> $email['member'],
+            'option'=> $email['option']
+        ));
+        $text_view->setTemplate('email/text-email');
+
+        $renderer = new PhpRenderer();
 
         try {
             // defined in TWeb\Controller\AbstractController
             $this->sendMultiPartMail(
                 $header_meta, 
-                $message['message_content'], 
-                $plain_text_message
+                $renderer->render($html_view), 
+                $renderer->render($text_view)
             );
         } catch (Exception $e) {
             //log it or something
@@ -191,5 +214,16 @@ class MailController extends AbstractController
         } catch (Exception $e) {
             //log it or something
         }
+    }
+
+    public function testSxMail()
+    {
+        $viewModel = new ViewModel;
+        $viewModel->setTemplate('mock.phtml');
+
+        $mail     = $serviceManager->get('SxMail\Service\SxMail');
+        // testWithLayout is configured in the config.php file
+        $sxMail   = $mail->prepare('testWithLayout');
+        $data     = $sxMail->compose($viewModel);
     }
 }

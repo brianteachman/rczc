@@ -1,0 +1,28 @@
+<?= strip_tags($this->message['message_content']) ?>
+
+<?php if (isset($this->option['proofing']) && $this->member): ?>
+
+<?= $this->member->getFullName() ?> - <?= $this->member->getMemberType() ?>
+
+<?= $this->member->getAddress() ?>
+
+home: <?= $this->member->home_phone ?>
+
+<?= $this->member->email ?>
+
+Volunteering: <?= $this->member->sangha_jobs ?>
+
+Interested in: <?= $this->member->volunteer_interests ?>
+
+<?php endif; ?>
+
+This message is from the Red Cedar Zen Community.
+<?php if (isset($this->option['tax_receipt'])): ?>
+
+For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->option['tax_year'] ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
+<?php endif; ?>
+
+More information is available at <a href='http://www.redcedarzen.org/'>www.redcedarzen.org</a>
+For membership information or mailing list questions write to <a href='mailto:info@redcedarzen.org'>info@redcedarzen.org</a>
+To register for a retreat write to <a href='mailto:registrar@redcedarzen.org'>registrar@redcedarzen.org</a>
+To reach resident priest Nomon Tim Burnett write to <a href='mailto:tim@redcedarzen.org'>tim@redcedarzen.org</a>
