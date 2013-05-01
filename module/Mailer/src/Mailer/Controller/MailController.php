@@ -58,7 +58,7 @@ class MailController extends AbstractController
             try {
                 $member = $this->getMemberTable()->getMember($id);
             } catch (\Exception $ex) {
-                throw new \InvalidArguementException('The member your trying to message doesn\'t exists.');
+                throw new \InvalidArgumentException('The member your trying to message doesn\'t exists.');
             }
         }
 
