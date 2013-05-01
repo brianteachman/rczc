@@ -19,10 +19,11 @@ class MessageForm extends Form
         ));
 
         $this->add(array(
-            'name' => 'email_subject',
+            'name' => 'message_subject',
             'attributes' => array(
                 'type'  => 'text',
-                //'style' => "width:200px;"
+                'placeholder' => 'From the Red Cedar Zen Community',
+                'style' => "width:100%;"
             ),/*
             'options' => array(
                 'label' => 'First Name',
@@ -30,16 +31,50 @@ class MessageForm extends Form
         ));
 
         $this->add(array(
-            'name' => 'email_message',
+            'name' => 'message_content',
             'attributes' => array(
                 'type'  => 'textarea',
-                //'style' => "width:600px;"
+                'style' => "width:100%;"
             ),/*
             'options' => array(
                 'label' => 'Member Notes',
             ),*/
         ));
 
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'member_info',
+            'options' => array(
+                //'label' => 'A checkbox',
+                'use_hidden_element' => false, 
+                'checked_value' => '1',
+                'unchecked_value' => ''
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'tax_receipt',
+            'options' => array(
+                //'label' => 'A checkbox',
+                'use_hidden_element' => false,
+                'checked_value' => '1',
+                'unchecked_value' => ''
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'tax_year',
+            'options' => array(
+                //'label' => 'tax_year',
+                'value_options' => array(
+                    '2012' => '2012',
+                    '2013' => '2013',
+                ),
+            )
+        ));
+/*
         $this->add(array(
             'type' => 'Zend\Form\Element\Select',
             'name' => 'membership_type',
@@ -53,18 +88,18 @@ class MessageForm extends Form
                 ),
             )
         ));
-
+*/
         $this->add(array(
             'type' => 'Zend\Form\Element\Radio',
-            'name' => 'membership_group',
+            'name' => 'send_to',
             'options' => array(
                 //'label' => 'Send To: ',
                 'value_options' => array(
-                    'member' => 'Members',
-                    'friend' => 'Friends',
-                    'members_friends' => 'Members &amp; Friends',
-                    'mailing_list' => 'Non-Members (on mailing list only)',
-                    'all' => 'All (everyone: members, friends & non-members) ',
+                    'member' => 'Members ',
+                    'friends' => 'Friends ',
+                    'members_friends' => 'Members & Friends ',
+                    'mailing_list' => 'Non-Members (on mailing list only) ',
+                    'everyone' => 'Everyone (members, friends & non-members) ',
                 ),
             )
         ));
@@ -75,24 +110,12 @@ class MessageForm extends Form
             'options' => array(
                 //'label' => 'Local Person?',
                 'value_options' => array(
-                    'local' => 'local',
-                    'remote' => 'remote',
-                    'all' => 'all',
+                    'local' => 'Local ',
+                    'remote' => 'Remote ',
+                    'all' => 'All ',
                 ),
             )
         ));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Checkbox',
-            'name' => 'checkbox',
-            'options' => array(
-                //'label' => 'A checkbox',
-                'use_hidden_element' => true,
-                'checked_value' => 'good',
-                'unchecked_value' => 'bad'
-            )
-        ));
-
         
         $this->add(new Element\Csrf('security'));
 
@@ -100,8 +123,7 @@ class MessageForm extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
-                'value' => 'Go',
-                'id' => 'submitbutton',
+                'value' => 'Send',
             ),
         ));
     }

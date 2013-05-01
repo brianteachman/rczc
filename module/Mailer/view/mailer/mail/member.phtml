@@ -1,0 +1,90 @@
+<?php
+
+$title = 'Send Email Announcement for Red Cedar Zen Community';
+$this->headTitle($title);
+
+$this->headScript()->prependFile($this->basePath() . '/tinymce/tinymce.min.js');
+?>
+<?php $this->InlineScript()->captureStart(); ?>
+tinyMCE.init({
+        mode : "textareas"
+});
+<?php $this->InlineScript()->captureEnd(); ?>
+
+<?php if ($this->post): ?>
+
+    <?= print_r($this->post) ?>
+
+<?php else: ?>
+
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form = $this->form;
+//$form->setAttribute('action', $this->url('mail', array('action' => 'review')));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+//echo ;
+echo $this->formRow($form->get('security')) . '<br>';
+?>
+
+<hr>
+    <div id="MessagePanel">
+
+    <?php if ($this->member): ?>
+        
+        <div id="SendToMember">
+            <h2>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h2>
+        </div>
+        <?= $this->formHidden($form->get('id')) ?>
+
+    <?php else: ?>
+
+        <div id="SendToGroup">
+            <h2>Send to:</h2>
+
+            <em>Membership:</em>
+                <?= $this->formRow($form->get('send_to')) ?>
+                <br>
+                
+            <em>Location:</em>
+                <?= $this->formRow($form->get('location')) ?>
+        </div>
+
+    <?php endif; ?>
+    <!-- -->
+
+        <br>
+
+        <div ID="SubjectPanel">
+            <h2>Subject:</h2> 
+            <?= $this->formRow($form->get('message_subject')) ?>
+        </div>
+
+        <!-- rich text editor -->
+        <?= $this->formRow($form->get('message_content')) ?>
+        
+        <br>
+
+        <div class="smalltext">
+            <b>Membership Use Only:</b>
+            <br>
+            
+            <?= $this->formRow($form->get('member_info')) ?> Sangha Directory Proofing - append each person's contact info to the message they receive.
+            <br>
+ 
+            <?= $this->formRow($form->get('tax_receipt')) ?> Tax Receipt for 
+            <?= $this->formRow($form->get('tax_year')) ?> - append tax receipt wording to the end of the email.)
+        </div>
+
+        <p>NOTE: To send a message to an individual person using this system, go to the <a href="<?php echo $this->url('members', array('action'=>'index'));?>">Mailing List</a> and click on the person's email address.</p>
+
+        <div style="float:right;">
+            <?= $this->formRow($form->get('submit')) ?>
+        </div>
+    </div>
+
+<?= $this->form()->closeTag(); ?>
+
+<?php endif; ?>

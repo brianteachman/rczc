@@ -6,6 +6,8 @@ use TWeb\Controller\AbstractController;
 use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Model\ViewModel;
 use Member\Model\Member;
+use Mailer\Model\Message;
+use Mailer\Form\MessageForm;
 
 class MailController extends AbstractController
 {
@@ -16,19 +18,10 @@ class MailController extends AbstractController
         'append_address' => 'on',
         'tax_receipt' => 'on',
         'tax_year' => 2012,
-        'action' => 'Review Message'
-    );
-
-    protected $group_message = array(
-        'csrf' => 'SOME_HASH',
+        'action' => 'Review Message',
+        // Below are only present on group submission
         'send_to' => 'members', /* members, friends, members_and_friends, mailing_list, everyone */ 
         'location' => 'all', /* local, remote, all */
-        'message_subject' => 'From the Red Cedar Zen Community',
-        'message_content' => '<p>New Message</p>',
-        'append_address' => 'on',
-        'tax_receipt' => 'on',
-        'tax_year' => 2012,
-        'action' => 'Review Message'
     );
 
     protected $memberTable;
@@ -48,57 +41,72 @@ class MailController extends AbstractController
         return array();
     }
 
-    public function newAction()
+    public function memberAction()
     {
-        $return_vars = array();
+        $form = new MessageForm();
+        $form->get('submit')->setValue('Review');
 
         // If GET param `id`, check if member exist;
         // if member exist, pass the entity into the view
         $id = $this->params()->fromRoute('id', null);
-        try {
-            $member = $this->getMemberTable()->getMember($id);
-        }
-        catch (\Exception $ex) {
-            /*
-            return $this->redirect()->toRoute('members', array(
-                'action' => 'index'
-            ));
-            */
+        if ($id) {
+            try {
+                $member = $this->getMemberTable()->getMember($id);
+            } catch (\Exception $ex) {
+                throw new \InvalidArguementException('The member your trying to message doesn\'t exists.');
+            }
         }
 
-        // If the form was submitted
-        $post = $this->params()->fromPost();
-        if ($post) {
-            if ($post['message_subject'] == '') {
-                $post['message_subject'] = 'From the Red Cedar Zen Community';
-            }
-            if (isset($post['member_info'])) {
-                $return_vars['proofing'] = true;
-            }
-            if (isset($post['tax_receipt'])) {
-                $return_vars['tax_receipt'] = true;
-                $return_vars['tax_year'] = $post['tax_year'];
-            }
+        $request = $this->getRequest();
+        if ($request->isPost()) {
 
-            $email = array(
-                'message'=>$post, 
-                //'member_id'=>$member->id, 
-                'option'=>$return_vars
-            );
-            if ($member) {
-                $email['member_id'] = $member->id;
-            }
-            $_SESSION['review'] = serialize($email);
+            //return array('post' => $request->getPost());
 
-            return $this->redirect()->toRoute('mail', array(
-                'action' => 'review'
-            ));
+            $message = new Message();
+            $form->setInputFilter($message->getInputFilter());
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+                //$message->exchangeArray($form->getData());
+                //$this->getMailTable()->saveMessage($message);
+
+                //$data = serialize($form->getData());
+                $data = $form->getData();
+
+                $return_vars = array();
+
+                if ($data['message_subject'] == '') {
+                    $data['message_subject'] = 'From the Red Cedar Zen Community';
+                }
+                if (isset($data['member_info'])) {
+                    $return_vars['proofing'] = true;
+                }
+                if (isset($data['tax_receipt'])) {
+                    $return_vars['tax_receipt'] = true;
+                    $return_vars['tax_year'] = $data['tax_year'];
+                }
+
+                $email = array(
+                    'message'=>$data, 
+                    //'member_id'=>$member->id, 
+                    'option'=>$return_vars
+                );
+                if ($member) {
+                    $email['member_id'] = $member->id;
+                }
+                $_SESSION['review'] = serialize($email);
+
+                return $this->redirect()->toRoute('mail', array(
+                    'action' => 'review'
+                ));
+            }/* else {
+                return array('post' => $form->getMessages());
+            }*/
         }
-
         if (isset($member)) {
-            return array('member'=>$member);
+            return array('form' => $form, 'member' => $member);
         }
-        return array();
+        return array('form' => $form);
     }
 
     public function reviewAction()
@@ -120,13 +128,25 @@ class MailController extends AbstractController
             'option'=> $session['option']
         );
 
-        if (isset($_POST['action']) && $_POST['action'] == 'Send') {
+        $post = $this->params()->fromPost();
+        if (isset($post['action'])) {
 
-            $this->sendMessageToMember($member, $email);
+            if ($post['action'] == 'Send') {
+                $this->sendMessageToMember($member, $email);
 
-            return $this->redirect()->toRoute('mail', array(
-                'action' => 'sent'
-            ));
+                return $this->redirect()->toRoute('mail', array(
+                    'action' => 'sent'
+                ));
+            } else if ($post['action'] == 'Edit') {
+
+                $_SESSION['edit'] = serialize($post);
+                unset($_SESSION['review']);
+
+                return $this->redirect()->toRoute('mail', array(
+                    'action' => 'message'
+                ));
+            }
+                
         }
 
         $view = new ViewModel(array(

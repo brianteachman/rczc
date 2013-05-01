@@ -472,7 +472,7 @@ $this->headTitle($title);
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td valign="top" width="350">
+                                                        <td valign="top" width="100%">
                                                             <div mc:edit="std_footer" style="font-size:x-small;">
 																<hr />
 
@@ -484,11 +484,6 @@ $this->headTitle($title);
                                                                 To register for a retreat write to <a href='mailto:registrar@redcedarzen.org'>registrar@redcedarzen.org</a> <br>
 
                                                                 To reach resident priest Nomon Tim Burnett write to <a href='mailto:tim@redcedarzen.org'>tim@redcedarzen.org</a>
-                                                            </div>
-                                                        </td>
-                                                        <td valign="top" width="190" id="monkeyRewards">
-                                                            <div mc:edit="monkeyrewards">
-                                                                *|IF:REWARDS|* *|HTML:REWARDS|* *|END:IF|*
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -517,6 +512,7 @@ $this->headTitle($title);
 
         <center>
             <form action="" method="post">
+                <input type="submit" name="action" value="Edit" style="padding:.5em;margin:1em 0;" />
                 <input type="submit" name="action" value="Send" style="padding:.5em;margin:1em 0;" />
             </form>
         </center>

@@ -13,6 +13,7 @@ return array(
         'TWeb',
         'Member',
         'Mailer',
+        //'SxMail',
         ),
     'module_listener_options' => array(
         'module_paths' => array(
