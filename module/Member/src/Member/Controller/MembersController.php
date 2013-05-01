@@ -172,4 +172,30 @@ class MembersController extends AbstractActionController
             ));
         }
     }
+
+    public function testMembersListAction()
+    {
+        $groups = array(
+            'member', 'friends', 
+            'members_friends', 
+            'mailing_list', 
+            'everyone'
+        );
+        try {
+            //$members = $this->getMemberTable()->getGroupOfMembers('everyone');
+            $members = $this->getMemberTable()->getGroupOfMembers($groups[1]);
+        } catch (Exception $e) {
+            throw new Exception('I don\'t know...');
+        }
+
+        $result = new \ArrayObject;
+        foreach ($members as $member) {
+            if ($member->email) {
+                $result->append($member);
+            }
+        }
+
+        //return array('members' => $members, 'group_list' => $groups[1]);
+        return array('members' => $result, 'group_list' => $groups[1]);
+    }
 }

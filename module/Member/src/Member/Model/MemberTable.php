@@ -32,6 +32,66 @@ class MemberTable
     }
 
     /**
+     * @todo Update table so email without value is NULL
+     * 
+     * @param  string $group_name Membership group
+     * @return Zend\Db\ResultSet
+     */
+    public function getGroupOfMembers($group_name)
+    {
+        $groups = array(
+            'member', 'friends', 
+            'members_friends', 
+            'mailing_list', 
+            'everyone'
+        );
+
+        if (in_array($group_name, $groups)) {
+            switch ($group_name) {
+                case 'member':
+                    return $this->tableGateway->select(
+                        array(
+                            'membership_type' => 3,
+                            new \Zend\Db\Sql\Predicate\IsNotNull('email')
+                        )
+                    );
+                    break;
+                
+                case 'friends':
+                    return $this->tableGateway->select(
+                        array(
+                            'membership_type' => 2,
+                            new \Zend\Db\Sql\Predicate\IsNotNull('email')
+                        )
+                    );
+                    break;
+                
+                case 'members_friends':
+                    $sel = '`membership_type` = 2 OR `membership_type` = 3';
+                    return $this->tableGateway->select($sel);
+                    break;
+                
+                case 'mailing_list':
+                    return $this->tableGateway->select(
+                        array(
+                            'membership_type' => 1,
+                            new \Zend\Db\Sql\Predicate\IsNotNull('email')
+                        )
+                    );
+                    break;
+
+                case 'everyone':
+                //default: /* everyone */
+                    $sel = array(new \Zend\Db\Sql\Predicate\IsNotNull('email'));
+                    return $this->tableGateway->select($sel);
+                    break;
+            }
+        } else {
+            throw new \Exception("Query is not in the groups array.");
+        }
+    }
+
+    /**
      * Return ResultSet of all of opted-in or members.
      * 
      * @param  string $type Either 'sangha' or 'members'

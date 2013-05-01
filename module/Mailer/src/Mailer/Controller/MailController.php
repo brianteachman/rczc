@@ -119,7 +119,7 @@ class MailController extends AbstractController
             $to = $member->email;
         } else {
             $member = null;
-            $to = $session['message']['send_to'];
+            $to = array('group' => $session['message']['send_to']);
         }
 
         $email = array(
@@ -133,7 +133,11 @@ class MailController extends AbstractController
         if (isset($post['action'])) {
 
             if ($post['action'] == 'Send') {
-                $this->sendMessageToMember($member, $email);
+                if (isset($email['to']['group'])) {
+                    $this->sendMessageToGroup($email['to']['group'], $email);
+                } else {
+                    $this->sendMessageToMember($member, $email);
+                }
 
                 return $this->redirect()->toRoute('mail', array(
                     'action' => 'sent'
@@ -226,38 +230,27 @@ class MailController extends AbstractController
      * 
      * @param  string[] $info Array containing elements of the message.
      */
-    protected function sendMessageToGroup($info)
+    protected function sendMessageToGroup($group_name, $email)
     {
-        $meta = array(
-           'from' => 'mailings@sanghasoftware.com',
-           'from_name' => 'Red Cedar Zen Community',
-           'reply_to' => 'info@redcedarzen.org',
-           'reply_to_name' => 'Red Cedar Zen Community',
-           'to' => 'tia@sacred-energy.com',
-           'to_name' => '',
-           'subject' => 'Tarot reading request',
+        $groups = array(
+            'member', 'friends', 
+            'members_friends', 
+            'mailing_list', 
+            'everyone'
         );
 
-        $text_body;
-
-        $html_body;
-
         try {
-            // defined in TWeb\Controller\AbstractController
-            $this->sendMultiPartMail($meta, $html_body, $text_body);
+            $members = $this->getMemberTable()->getGroupOfMembers($group_name);
+
+            $mail_list = new \ArrayObject;
+            foreach ($members as $member) {
+                if ($member->email) {
+                    $mail_list->append($member);
+                    //$this->sendMessageToMember($member, $email);
+                }
+            }
         } catch (Exception $e) {
             //log it or something
         }
-    }
-
-    public function testSxMail()
-    {
-        $viewModel = new ViewModel;
-        $viewModel->setTemplate('mock.phtml');
-
-        $mail     = $serviceManager->get('SxMail\Service\SxMail');
-        // testWithLayout is configured in the config.php file
-        $sxMail   = $mail->prepare('testWithLayout');
-        $data     = $sxMail->compose($viewModel);
     }
 }
