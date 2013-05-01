@@ -189,8 +189,8 @@ class MailController extends AbstractController
         $resolver = new Resolver\AggregateResolver();
         $renderer->setResolver($resolver);
         $map = new Resolver\TemplateMapResolver(array(
-            'email/group-email' => dirname(__DIR__) . '../view/email/group-email.phtml',
-            'email/text-email'  => dirname(__DIR__) . '../view/email/text-email.phtml',
+            'email/group-email' => dirname(__DIR__) . '/../view/email/group-email.phtml',
+            'email/text-email'  => dirname(__DIR__) . '/../view/email/text-email.phtml',
         ));
         $resolver->attach($map);
 
