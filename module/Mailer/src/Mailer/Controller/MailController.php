@@ -26,6 +26,7 @@ class MailController extends AbstractController
     );
 
     protected $memberTable;
+    protected $mailTable;
 
     public function getMemberTable()
     {
@@ -37,6 +38,16 @@ class MailController extends AbstractController
         return $this->memberTable;
     }
 
+    public function getMailTable()
+    {
+        if (!$this->mailTable) {
+            $sm = $this->getServiceLocator();
+            // this is being configured in Module.php
+            $this->mailTable = $sm->get('Mailer\Model\MessageTable');
+        }
+        return $this->mailTable;
+    }
+
     public function indexAction()
     {
         return array();
@@ -44,7 +55,7 @@ class MailController extends AbstractController
 
     public function memberAction()
     {
-        if ($_SESSION['edit']) {
+        if (isset($_SESSION['edit'])) {
             $session = unserialize($_SESSION['edit']);
         }
 

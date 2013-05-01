@@ -24,7 +24,6 @@ class Message implements InputFilterAwareInterface
     public $member_info;
     public $tax_receipt;
     public $tax_year;
-    public $membership_type;
     public $send_to;
     public $location;
 

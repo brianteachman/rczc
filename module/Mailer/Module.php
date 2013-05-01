@@ -35,4 +35,27 @@ class Module
             ),
         );
     }
+
+    /**
+     * I'm using the ServiceManager to always use the same instance
+     * of MemberTable.
+     */
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Mailer\Model\MessageTable' => function($sm) {
+                    $tableGateway = $sm->get('MessageTableGateway');
+                    $table = new MessageTable($tableGateway);
+                    return $table;
+                },
+                'MessageTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Message());
+                    return new TableGateway('messages', $dbAdapter, null, $resultSetPrototype);
+                },
+            ),
+        );
+    }
 }
