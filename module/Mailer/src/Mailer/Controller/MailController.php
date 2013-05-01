@@ -47,7 +47,7 @@ class MailController extends AbstractController
         if ($_SESSION['edit']) {
             $session = unserialize($_SESSION['edit']);
         }
-        
+
         $form = new MessageForm();
         $form->get('submit')->setValue('Review');
 
@@ -127,8 +127,10 @@ class MailController extends AbstractController
         if (isset($session['member_id'])) {
             $member = $this->getMemberTable()->getMember($session['member_id']);
             $to = $member->email;
+            $group = false;
         } else {
             $member = null;
+            $group = true;
             $to = array('group' => $session['message']['send_to']);
         }
 
@@ -143,9 +145,11 @@ class MailController extends AbstractController
         if (isset($post['action'])) {
 
             if ($post['action'] == 'Send') {
-                if (isset($email['to']['group'])) {
+                if ($group) {
+                    //throw new \Exception('Group Mailing to '.$email['to']['group']);
                     $this->sendMessageToGroup($email['to']['group'], $email);
                 } else {
+                    //throw new \Exception('Shooting message to '.$email['to']);
                     $this->sendMessageToMember($member, $email);
                 }
 

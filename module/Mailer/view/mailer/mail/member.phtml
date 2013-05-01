@@ -38,6 +38,7 @@ echo $this->formRow($form->get('security')) . '<br>';
             <h2>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h2>
         </div>
         <?= $this->formHidden($form->get('id')) ?>
+        <input type="hidden" name="id" value="<?= $this->member->id ?>">
 
     <?php else: ?>
 
