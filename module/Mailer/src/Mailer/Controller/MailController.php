@@ -4,6 +4,7 @@ namespace Mailer\Controller;
 
 use TWeb\Controller\AbstractController;
 use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver;
 use Zend\View\Model\ViewModel;
 use Member\Model\Member;
 use Mailer\Model\Message;
@@ -184,6 +185,15 @@ class MailController extends AbstractController
            'subject' => $email['message']['message_subject'],
         );
 
+        $renderer = new PhpRenderer();
+        $resolver = new Resolver\AggregateResolver();
+        $renderer->setResolver($resolver);
+        $map = new Resolver\TemplateMapResolver(array(
+            'email/group-email' => __DIR__ . '../view/email/group-email.phtml',
+            'email/text-email'  => __DIR__ . '../view/email/text-email.phtml',
+        ));
+        $resolver->attach($map);
+        
         $html_view = new ViewModel(array(
             'to'=> $email['to'],
             'message'=> $email['message'],
@@ -200,8 +210,6 @@ class MailController extends AbstractController
             'option'=> $email['option']
         ));
         $text_view->setTemplate('email/text-email');
-
-        $renderer = new PhpRenderer();
 
         try {
             // defined in TWeb\Controller\AbstractController
