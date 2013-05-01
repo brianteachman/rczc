@@ -44,6 +44,10 @@ class MailController extends AbstractController
 
     public function memberAction()
     {
+        if ($_SESSION['edit']) {
+            $session = unserialize($_SESSION['edit']);
+        }
+        
         $form = new MessageForm();
         $form->get('submit')->setValue('Review');
 
@@ -112,7 +116,13 @@ class MailController extends AbstractController
 
     public function reviewAction()
     {
-        $session = unserialize($_SESSION['review']);
+        if (isset($_SESSION['review'])) {
+            $session = unserialize($_SESSION['review']);
+        } else {
+            return $this->redirect()->toRoute('mail', array(
+                'action' => 'member'
+            ));
+        }
 
         if (isset($session['member_id'])) {
             $member = $this->getMemberTable()->getMember($session['member_id']);
@@ -148,7 +158,7 @@ class MailController extends AbstractController
                 unset($_SESSION['review']);
 
                 return $this->redirect()->toRoute('mail', array(
-                    'action' => 'message'
+                    'action' => 'member'
                 ));
             }
                 
@@ -229,9 +239,11 @@ class MailController extends AbstractController
      * Multi-part sendmail method
      * 
      * @param  string[] $info Array containing elements of the message.
+     * @return object[]       Returns array of Member\Model\Members
      */
     protected function sendMessageToGroup($group_name, $email)
     {
+        $mail_list = new \ArrayObject;
         $groups = array(
             'member', 'friends', 
             'members_friends', 
@@ -241,16 +253,16 @@ class MailController extends AbstractController
 
         try {
             $members = $this->getMemberTable()->getGroupOfMembers($group_name);
-
-            $mail_list = new \ArrayObject;
             foreach ($members as $member) {
                 if ($member->email) {
                     $mail_list->append($member);
-                    //$this->sendMessageToMember($member, $email);
+                    $this->sendMessageToMember($member, $email);
                 }
             }
         } catch (Exception $e) {
             //log it or something
         }
+
+        return $mail_list;
     }
 }
