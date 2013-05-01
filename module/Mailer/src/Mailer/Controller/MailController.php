@@ -186,13 +186,11 @@ class MailController extends AbstractController
         );
 
         $renderer = new PhpRenderer();
-        $resolver = new Resolver\AggregateResolver();
-        $renderer->setResolver($resolver);
         $map = new Resolver\TemplateMapResolver(array(
-            'email/group-email' => dirname(__DIR__) . '/../view/email/group-email.phtml',
-            'email/text-email'  => dirname(__DIR__) . '/../view/email/text-email.phtml',
+            'group-email' => __DIR__ . '/../../../view/email/group-email.phtml',
+            'text-email'  => __DIR__ . '/../../../view/email/text-email.phtml',
         ));
-        $resolver->attach($map);
+        $renderer->setResolver($map);
 
         $html_view = new ViewModel(array(
             'to'=> $email['to'],
@@ -200,7 +198,7 @@ class MailController extends AbstractController
             'member'=> $email['member'],
             'option'=> $email['option']
         ));
-        $html_view->setTemplate('email/group-email');
+        $html_view->setTemplate('group-email');
 
         $email['message']['message_content'] = strip_tags($email['message']['message_content']);
         $text_view = new ViewModel(array(
@@ -209,7 +207,7 @@ class MailController extends AbstractController
             'member'=> $email['member'],
             'option'=> $email['option']
         ));
-        $text_view->setTemplate('email/text-email');
+        $text_view->setTemplate('text-email');
 
         try {
             // defined in TWeb\Controller\AbstractController

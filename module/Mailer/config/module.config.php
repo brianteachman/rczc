@@ -30,11 +30,9 @@ return array(
         ),
     ),
     'view_manager' => array(
-        'template_map' => array(
-            'email/group-email' => __DIR__ . '/../view/email/group-email.phtml',
-        ),
         'template_path_stack' => array(
-            __DIR__ . '/../view',
+            'mailer' => __DIR__ . '/../view',
+            'email' => __DIR__ . '/../view',
         ),
     ),
 );
