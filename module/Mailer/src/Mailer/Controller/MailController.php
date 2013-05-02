@@ -222,7 +222,7 @@ class MailController extends AbstractController
             'text-email'  => __DIR__ . '/../../../view/email/text-email.phtml',
         ));
         $renderer->setResolver($map);
-        $renderer->plugin('basePath')->setBasePath('public');
+        //$renderer->plugin('basePath')->setBasePath('public');
 
         $html_view = new ViewModel(array(
             'to'=> $email['to'],
