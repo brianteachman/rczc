@@ -68,6 +68,8 @@ class MailController extends AbstractController
         if ($id) {
             try {
                 $member = $this->getMemberTable()->getMember($id);
+                // This needs to be a $message
+                //$form->bind($member);
             } catch (\Exception $ex) {
                 throw new \InvalidArgumentException('The member your trying to message doesn\'t exists.');
             }
@@ -220,6 +222,7 @@ class MailController extends AbstractController
             'text-email'  => __DIR__ . '/../../../view/email/text-email.phtml',
         ));
         $renderer->setResolver($map);
+        $renderer->plugin('basePath')->setBasePath('public');
 
         $html_view = new ViewModel(array(
             'to'=> $email['to'],

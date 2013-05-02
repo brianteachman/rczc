@@ -75,4 +75,20 @@ class MailControllerTest extends PHPUnit_Framework_TestCase
             $this->controller->getMailTable()
         );
     }
+
+    public function test()
+    {
+        $post = array(
+        'csrf' => 'SOME_HASH',
+        'message_subject' => 'From the Red Cedar Zen Community',
+        'message_content' => '<p>New Message</p>',
+        'append_address' => 'on',
+        'tax_receipt' => 'on',
+        'tax_year' => 2012,
+        'action' => 'Review Message',
+        // Below are only present on group submission
+        'send_to' => 'members', /* members, friends, members_and_friends, mailing_list, everyone */ 
+        'location' => 'all', /* local, remote, all */
+    );
+    }
 }
