@@ -2,7 +2,7 @@
 <phpunit bootstrap="./Bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="Mailer Test Suite">
-            <directory>./TarotTest</directory>
+            <directory>./MailerTest</directory>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -8,7 +8,7 @@
 namespace MailerTest\Controller;
 
 use MailerTest\Bootstrap;
-use Mailer\Controller\IndexController;
+use Mailer\Controller\MailController;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
@@ -27,7 +27,7 @@ class MailControllerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $serviceManager = Bootstrap::getServiceManager();
-        $this->controller = new IndexController();
+        $this->controller = new MailController();
         $this->request    = new Request();
         $this->routeMatch = new RouteMatch(array('controller' => 'index'));
         $this->event      = new MvcEvent();
@@ -50,13 +50,29 @@ class MailControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testrMailActionCanBeAccessed()
+    public function testMemberActionCanBeAccessed()
     {
-        $this->routeMatch->setParam('action', 'mail');
+        $this->routeMatch->setParam('action', 'member');
 
         $result   = $this->controller->dispatch($this->request);
         $response = $this->controller->getResponse();
 
         $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testMemberTableIsCorrectlyLoaded()
+    {
+        $this->assertInstanceOf(
+            '\Member\Model\MemberTable',
+            $this->controller->getMemberTable()
+        );
+    }
+
+    public function testMailTableIsCorrectlyLoaded()
+    {
+        $this->assertInstanceOf(
+            '\Mailer\Model\MessageTable',
+            $this->controller->getMailTable()
+        );
     }
 }
