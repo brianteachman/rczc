@@ -197,4 +197,10 @@ class MembersController extends AbstractActionController
         //return array('members' => $members, 'group_list' => $groups[1]);
         return array('members' => $result, 'group_list' => $groups[1]);
     }
+
+    public function rolesAction()
+    {
+        $members = $this->getMemberTable()->getMemberRoles();
+        return array('members' => $members);
+    }
 }

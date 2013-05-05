@@ -31,6 +31,24 @@ class MemberTable
         return $row;
     }
 
+    public function getMemberRoles()
+    {
+        /**
+         * SELECT `id`, `first_name` , `last_name` , `sangha_jobs`
+         * FROM `members`
+         * WHERE `sangha_jobs` != ''
+         */
+        $rowset = $this->tableGateway->select("`sangha_jobs` != ''");
+        /*
+        $rowset = $this->tableGateway->select(function (Select $select) {
+            $select->columns(array('id', 'first_name', 'last_name', 'sangha_job'));
+            //$select->where('`sangha_job` != ""');
+            $select->where(array(new \Zend\Db\Sql\Predicate\IsNotNull('sangha_job')));
+            //$select->order('last_name ASC');
+        });*/
+        return $rowset;
+    }
+
     /**
      * @todo Update table so email without value is NULL
      * 
