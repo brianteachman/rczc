@@ -30,12 +30,19 @@ $this->headTitle($title);
     <th>DATE SENT</th>
     <th></th>
 </tr>
+
 <?php foreach ($messages as $message) : ?>
 <tr id="<?php echo $this->escapeHtml($message['id']) ?>">
-    <td><?php echo $this->escapeHtml($message['send_to']) ?></td>
+    <td>
+        <?php echo $this->escapeHtml($message['send_to']) ?>
+    </td>
     <?php /* <td><?php echo $this->escapeHtml($message['from']);?></td> */ ?>
-    <td><?php echo $this->escapeHtml($message['message_subject']) ?></td>
-    <td><?php echo $this->escapeHtml($message['sent']) ?></td>
+    <td>
+        <?php echo $this->escapeHtml($message['message_subject']) ?>
+    </td>
+    <td>
+        <?php echo $this->escapeHtml($message['sent']) ?>
+    </td>
     <td>
         <a href="<?php echo $this->url('mail/edit', array('id' => $message['id'])) ?>">Edit</a>
     </td>

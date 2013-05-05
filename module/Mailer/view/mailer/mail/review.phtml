@@ -9,6 +9,12 @@ $this->headTitle($title);
 
 ?>
 
+<?php if (isset($this->post)): ?>
+ 
+    <pre><?php var_dump($this->post) ?></pre>
+
+<?php else: ?>
+
 <form name="ReviewForm" method="post" action="">
 
     <h1 align="center"><?= $title ?></h1>
@@ -132,3 +138,5 @@ To reach resident priest Nomon Tim Burnett write to <a href='mailto:tim@redcedar
     <input type="submit" name="action" value="Send">
 
 </form>
+
+<?php endif; ?>

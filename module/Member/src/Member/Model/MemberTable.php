@@ -58,7 +58,7 @@ class MemberTable
 
         if (in_array($group_name, $groups)) {
             switch ($group_name) {
-                case 'member':
+                case 'members':
                     return $this->tableGateway->select(
                         array(
                             'membership_type' => 3,
