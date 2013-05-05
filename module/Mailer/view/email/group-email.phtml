@@ -405,11 +405,11 @@ $this->headTitle($title);
                                                     <tr>
                                                         <td valign="top">
                                                             <div mc:edit="std_content00">
-                                                                <h1 class="h1"><?= $this->message['message_subject'] ?></h1>
+                                                                <h1 class="h1"><?= $this->message->message_subject ?></h1>
                                                                 
-                                                                <?= $this->message['message_content'] ?>
+                                                                <?= $this->message->message_content ?>
 
-                                                                <?php if (isset($this->option['proofing']) && $this->member): ?>
+                                                                <?php if ($this->message->member_info == 1 && $this->member): ?>
 
                                                                 <br /><hr />
                                                                 <!-- member.info start -->
@@ -434,11 +434,11 @@ $this->headTitle($title);
                                                                 <!-- member.info end -->
                                                                 <?php endif; ?>
 
-                                                                <?php if (isset($this->option['tax_receipt'])): ?>
+                                                                <?php if ($this->message->tax_receipt == 1): ?>
                                                                 <!-- tax.receipt start -->
                                                                 <hr>
                                                                 <div>
-                                                                    For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->option['tax_year'] ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
+                                                                    For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->message->tax_year ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
                                                                 <div>
                                                                 <!-- tax.receipt end -->
                                                                 <?php endif; ?>

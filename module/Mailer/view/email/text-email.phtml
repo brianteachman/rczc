@@ -1,6 +1,6 @@
-<?= strip_tags($this->message['message_content']) ?>
+<?= strip_tags($this->message->message_content) ?>
 
-<?php if (isset($this->option['proofing']) && $this->member): ?>
+<?php if ($this->message->member_info == 1 && $this->member): ?>
 
 <?= $this->member->getFullName() ?> - <?= $this->member->getMemberType() ?>
 
@@ -17,9 +17,9 @@ Interested in: <?= $this->member->volunteer_interests ?>
 <?php endif; ?>
 
 This message is from the Red Cedar Zen Community.
-<?php if (isset($this->option['tax_receipt'])): ?>
+<?php if ($this->message->tax_receipt == 1): ?>
 
-For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->option['tax_year'] ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
+For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->message->tax_year ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
 <?php endif; ?>
 
 More information is available at <a href='http://www.redcedarzen.org/'>www.redcedarzen.org</a>
