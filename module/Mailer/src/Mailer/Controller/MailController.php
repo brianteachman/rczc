@@ -165,7 +165,7 @@ class MailController extends AbstractController
                     //throw new \Exception('Group Mailing to '.$email['to']['group']);
                     $group_members = $this->getMemberTable()->getGroup($email['to']['group']);
 
-                    return array('post' => $group_members);
+                    //return array('post' => $group_members);
                     
                     $message->sendMessageToGroup($email, $group_members);
                 } else {
