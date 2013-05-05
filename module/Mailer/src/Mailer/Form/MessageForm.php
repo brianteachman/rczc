@@ -46,9 +46,9 @@ class MessageForm extends Form
             'name' => 'member_info',
             'options' => array(
                 //'label' => 'A checkbox',
-                'use_hidden_element' => false, 
+                'use_hidden_element' => true, 
                 'checked_value' => '1',
-                'unchecked_value' => ''
+                'unchecked_value' => '0'
             )
         ));
 
@@ -57,9 +57,9 @@ class MessageForm extends Form
             'name' => 'tax_receipt',
             'options' => array(
                 //'label' => 'A checkbox',
-                'use_hidden_element' => false,
+                'use_hidden_element' => true,
                 'checked_value' => '1',
-                'unchecked_value' => ''
+                'unchecked_value' => '0'
             )
         ));
 
@@ -68,27 +68,29 @@ class MessageForm extends Form
             'name' => 'tax_year',
             'options' => array(
                 //'label' => 'tax_year',
+                'empty_option' => '...',
                 'value_options' => array(
-                    '2012' => '2012',
                     '2013' => '2013',
+                    '2012' => '2012',
+                ),
+            )
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'send_to',
+            'options' => array(
+                //'label' => 'Select mailing group: ',
+                'value_options' => array(
+                    'members' => 'Members ',
+                    'friends' => 'Friends ',
+                    'members_friends' => 'Members & Friends ',
+                    'mailing_list' => 'Non-Members (on mailing list only) ',
+                    'everyone' => 'Everyone (members, friends & non-members) ',
                 ),
             )
         ));
 /*
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'membership_type',
-            'options' => array(
-                //'label' => 'Membership',
-                'value_options' => array(
-                    'member' => 'Member',
-                    'friend' => 'Friend of Red Cedar',
-                    'mailing_list' => 'Mailing List Only',
-                    'guest' => 'Dharma Center',
-                ),
-            )
-        ));
-*/
         $this->add(array(
             'type' => 'Zend\Form\Element\Radio',
             'name' => 'send_to',
@@ -103,16 +105,16 @@ class MessageForm extends Form
                 ),
             )
         ));
-
+*/
         $this->add(array(
             'type' => 'Zend\Form\Element\Radio',
             'name' => 'location',
             'options' => array(
                 //'label' => 'Local Person?',
                 'value_options' => array(
+                    'all' => 'All ',
                     'local' => 'Local ',
                     'remote' => 'Remote ',
-                    'all' => 'All ',
                 ),
             )
         ));

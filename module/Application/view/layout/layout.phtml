@@ -1,4 +1,8 @@
-
+<?php
+$this->headTitle('Red Cedar Zen Community');
+$this->headTitle('An Everyday Zen Community in Bellingham, WA');
+$this->headTitle()->setSeparator(' » ');
+?>
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js ie6" lang="en-US"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7" lang="en-US"> <![endif]-->
@@ -6,8 +10,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
 <head>
     <meta charset="UTF-8" />
-    <title>Red Cedar Zen Community &raquo; An Everyday Zen Community in Bellingham, WA</title>
-    
+    <?= $this->headTitle() ?>
     <link rel='canonical' href='http://www.redcedarzen.org/' />
         
     <link rel="profile" href="http://gmpg.org/xfn/11" />
@@ -98,7 +101,7 @@
                     <a href="http://www.redcedarzen.org/" title="Red Cedar Zen Community" rel="home">Red Cedar Zen Community</a>
                 </div><!-- #site-info -->
                 <div class="sixcol last">
-                    <a href="http://framework.zend.com/" style="float:right;color:#161616;text-decoration:none;">Built with Zend Framework.</a>
+                    <a href="http://framework.zend.com/" style="float:right;color:#161616;text-decoration:none;" target="_blank">Built on <img src="<?= $this->serverUrl() ?>/img/zf2-logo.png" width="20"></a>
                 </div>
             </div><!-- #colophon -->
         </footer><!-- #footer -->

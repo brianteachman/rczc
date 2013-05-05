@@ -384,7 +384,7 @@ $this->headTitle($title);
                                             <td class="headerContent">
                                             
                                             	<!-- // Begin Module: Standard Header Image \\ -->
-                                            	<img src="<?= $this->basePath() ?>/img/Banner2.jpg" style="max-width:600px;" id="headerImage campaign-icon" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext />
+                                            	<img src="<?= $this->serverUrl() ?>/img/Banner2.jpg" style="max-width:600px;" id="headerImage campaign-icon" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext />
                                             	<!-- // End Module: Standard Header Image \\ -->
                                             
                                             </td>
@@ -405,11 +405,11 @@ $this->headTitle($title);
                                                     <tr>
                                                         <td valign="top">
                                                             <div mc:edit="std_content00">
-                                                                <h1 class="h1"><?= $this->message['message_subject'] ?></h1>
+                                                                <h1 class="h1"><?= $this->message->message_subject ?></h1>
                                                                 
-                                                                <?= $this->message['message_content'] ?>
+                                                                <?= $this->message->message_content ?>
 
-                                                                <?php if (isset($this->option['proofing']) && $this->member): ?>
+                                                                <?php if ($this->message->member_info == 1 && $this->member): ?>
 
                                                                 <br /><hr />
                                                                 <!-- member.info start -->
@@ -434,11 +434,11 @@ $this->headTitle($title);
                                                                 <!-- member.info end -->
                                                                 <?php endif; ?>
 
-                                                                <?php if (isset($this->option['tax_receipt'])): ?>
+                                                                <?php if ($this->message->tax_receipt == 1): ?>
                                                                 <!-- tax.receipt start -->
                                                                 <hr>
                                                                 <div>
-                                                                    For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->option['tax_year'] ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
+                                                                    For tax purposes, please retain this letter in your records as receipt for this contribution during the <?= $this->message->tax_year ?> tax year. Your donation to the Red Cedar Zen Community, a publicly supported 501 (c) (3) non-profit corporation (EIN#26-0387536), is entirely tax deductible. No goods or services were received in exchange for this gift.
                                                                 <div>
                                                                 <!-- tax.receipt end -->
                                                                 <?php endif; ?>
@@ -462,21 +462,12 @@ $this->headTitle($title);
                                 	<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter">
                                     	<tr>
                                         	<td valign="top" class="footerContent">
-                                            
                                                 <!-- // Begin Module: Standard Footer \\ -->
                                                 <table border="0" cellpadding="10" cellspacing="0" width="100%">
                                                     <tr>
-                                                        <td colspan="2" valign="middle" id="social">
-                                                            <div mc:edit="std_social">
-                                                                &nbsp;<a href="https://www.facebook.com/pages/Red-Cedar-Zen-Community/379108162045">find us on Facebook</a>&nbsp;
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
                                                         <td valign="top" width="100%">
                                                             <div mc:edit="std_footer" style="font-size:x-small;">
-																<hr />
-
+																
                                                                 This message is from the Red Cedar Zen Community. <br>
                                                                 More information is available at <a href='http://www.redcedarzen.org/'>www.redcedarzen.org</a> <br>
 
@@ -485,6 +476,11 @@ $this->headTitle($title);
                                                                 To register for a retreat write to <a href='mailto:registrar@redcedarzen.org'>registrar@redcedarzen.org</a> <br>
 
                                                                 To reach resident priest Nomon Tim Burnett write to <a href='mailto:tim@redcedarzen.org'>tim@redcedarzen.org</a>
+                                                            </div>
+                                                        </td>
+                                                        <td valign="middle" id="social">
+                                                            <div mc:edit="std_social">
+                                                                &nbsp;<a href="https://www.facebook.com/pages/Red-Cedar-Zen-Community/379108162045" title="find us on Facebook"><img src="<?= $this->serverUrl() ?>/img/facebook_logo.jpg" alt="" width="150px" /></a>&nbsp;
                                                             </div>
                                                         </td>
                                                     </tr>

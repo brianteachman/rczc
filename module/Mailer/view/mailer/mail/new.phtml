@@ -5,46 +5,40 @@ $this->headTitle($title);
 
 $this->headScript()->prependFile($this->basePath() . '/tinymce/tinymce.min.js');
 ?>
-
 <?php $this->InlineScript()->captureStart(); ?>
 tinyMCE.init({
         mode : "textareas"
 });
 <?php $this->InlineScript()->captureEnd(); ?>
 
-<h1><?php echo $this->escapeHtml($title); ?></h1>
-
-<hr>
-
 <?php if ($this->post): ?>
-    
-    <pre><?= print_r($this->post) ?></pre>
 
-    <?php if (isset($this->option['proofing'])): ?>
-        <?= print_r($this->option['proofing']) ?>
-    <?php endif; ?>
-    
-    <?php if (isset($this->option['tax_receipt'])): ?>
-        <?= print_r($this->option['tax_receipt']) ?>
-    <?php endif; ?>
+    <?= print_r($this->post) ?>
 
 <?php else: ?>
 
-<form name="EmailForm" method="post" action="" id="EmailForm">
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form = $this->form;
+//$form->setAttribute('action', $this->url('mail', array('action' => 'review')));
+$form->prepare();
 
-    <div>
-        <input type="hidden" name="csrf" id="csrf" value="SOME_HASH">
-    </div>
+echo $this->form()->openTag($form);
 
-    <!-- STEP 1: SELECT RESPONDENTS AND CREATE THE MESSAGE -->
+//echo ;
+echo $this->formRow($form->get('security')) . '<br>';
+?>
+
+<hr>
     <div id="MessagePanel">
 
-    <!-- If members.member_id is in url params -->
     <?php if ($this->member): ?>
         
         <div id="SendToMember">
             <h2>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h2>
         </div>
+        <?= $this->formHidden($form->get('id')) ?>
+        <input type="hidden" name="id" value="<?= $this->member->id ?>">
 
     <?php else: ?>
 
@@ -52,23 +46,11 @@ tinyMCE.init({
             <h2>Send to:</h2>
 
             <em>Membership:</em>
-                <input type="radio" name="send_to" value="members" checked="checked" id="members"><label for="members">Members</label>
-                
-                <input type="radio" name="send_to" value="friends" id="friends"><label for="friends">Friends</label>
-
-                <input type="radio" name="send_to" value="members_and_friends" id="members+friends"><label for="members+friends">Members &amp; Friends</label>
-
-                <input type="radio" name="send_to" value="non_members" id="non_members"><label for="non_members">Non-Members (on mailing list only)</label>
-
-                <input type="radio" name="send_to" value="everyone" id="everyone"><label for="all_members">Everyone (members, friends &amp; non-members)</label>
+                <?= $this->formRow($form->get('send_to')) ?>
                 <br>
                 
             <em>Location:</em>
-                <input type="radio" name="location" value="local" id="local_radio"><label for="local_radio">Local</label>
-
-                <input type="radio" name="location" value="remote" id="remote_radio"><label for="remote_radio">Remote</label>
-
-                <input type="radio" name="location" value="all" checked="checked" id="all_radio"><label for="all_radio">All</label>
+                <?= $this->formRow($form->get('location')) ?>
         </div>
 
     <?php endif; ?>
@@ -78,41 +60,32 @@ tinyMCE.init({
 
         <div ID="SubjectPanel">
             <h2>Subject:</h2> 
-            <input name="message_subject" type="text" placeholder="From the Red Cedar Zen Community" id="subject_textbox" style="width:100%;">
+            <?= $this->formRow($form->get('message_subject')) ?>
         </div>
 
         <!-- rich text editor -->
-        <textarea name="message_content"></textarea>
+        <?= $this->formRow($form->get('message_content')) ?>
         
         <br>
 
-        <?php if ($this->member): ?>
         <div class="smalltext">
             <b>Membership Use Only:</b>
             <br>
- 
-            <input type="checkbox" name="member_info" id="member_info_checkbox">Sangha Directory Proofing - append each person's contact info to the message they receive.
+            
+            <?= $this->formRow($form->get('member_info')) ?> Sangha Directory Proofing - append each person's contact info to the message they receive.
             <br>
  
-            <input type="checkbox" name="tax_receipt" id="tax_receipt_checkbox">Tax Receipt for 
-            <select name="tax_year" id="tax_year_select">
-                <option value="2012">2012</option>
-                <option value="2013">2013</option>
-            </select> - append tax receipt wording to the end of the email.)
+            <?= $this->formRow($form->get('tax_receipt')) ?> Tax Receipt for 
+            <?= $this->formRow($form->get('tax_year')) ?> - append tax receipt wording to the end of the email.)
         </div>
-        <?php endif; ?>
 
         <p>NOTE: To send a message to an individual person using this system, go to the <a href="<?php echo $this->url('members', array('action'=>'index'));?>">Mailing List</a> and click on the person's email address.</p>
 
-        <div class="center">
-            <input type="submit" name="action" value="Review Message">
+        <div style="float:right;">
+            <?= $this->formRow($form->get('submit')) ?>
         </div>
     </div>
 
-    <!-- STEP 2: CONFIRM -->
-
-    <!-- STEP 3: RESULTS -->
-
-</form>
+<?= $this->form()->closeTag(); ?>
 
 <?php endif; ?>

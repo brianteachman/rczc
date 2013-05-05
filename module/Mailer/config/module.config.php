@@ -7,23 +7,64 @@ return array(
     ),
     'router' => array(
         'routes' => array(
-            // URL             Page                          Action
-            // -------------------------------------------------------
-            // /mail           Compose mailing list message  index
-            // /mail/new       Compose new email             new
-            // /mail/edit/2    Edit message with id of 2     edit
-            // /mail/delete/4  Delete message with id of 4   delete
+            // Literal route named "blog", with child routes
             'mail' => array(
-                'type'    => 'segment',
+                'type' => 'literal',
                 'options' => array(
-                    'route'    => '/mail[/][:action][/:id]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]*',
-                    ),
+                    'route' => '/mail',
                     'defaults' => array(
                         'controller' => 'Mailer\Controller\Mail',
-                        'action'     => 'index',
+                        'action' => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'member' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/member[/:id]',
+                            'constraints' => array(
+                                'id'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action'     => 'member',
+                            ),
+                        ),
+                    ),
+                    'review' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/review[/:id]',
+                            'constraints' => array(
+                                'id'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action'     => 'review',
+                            ),
+                        ),
+                    ),
+                    'edit' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/edit[/:id]',
+                            'constraints' => array(
+                                'id'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action'     => 'edit',
+                            ),
+                        ),
+                    ),
+                    'default' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/[:action]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                            ),
+                        ),
                     ),
                 ),
             ),

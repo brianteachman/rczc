@@ -10,22 +10,26 @@ use Member\Model\Member;
 use Mailer\Model\Message;
 use Mailer\Form\MessageForm;
 
+/**
+ * Routes:
+ * 
+ * /mail
+ * /mail/member/:id
+ * /mail/members
+ * /mail/review
+ * /mail/edit
+ * /mail/sent
+ */
 class MailController extends AbstractController
 {
-    protected $member_message = array(
-        'csrf' => 'SOME_HASH',
-        'message_subject' => 'From the Red Cedar Zen Community',
-        'message_content' => '<p>New Message</p>',
-        'append_address' => 'on',
-        'tax_receipt' => 'on',
-        'tax_year' => 2012,
-        'action' => 'Review Message',
-        // Below are only present on group submission
-        'send_to' => 'members', /* members, friends, members_and_friends, mailing_list, everyone */ 
-        'location' => 'all', /* local, remote, all */
-    );
-
+    /**
+     * @var Member\Model\MemberTable
+     */
     protected $memberTable;
+
+    /**
+     * @var Mailer\Model\MessageTable
+     */
     protected $mailTable;
 
     public function getMemberTable()
@@ -55,71 +59,68 @@ class MailController extends AbstractController
 
     public function memberAction()
     {
-        if (isset($_SESSION['edit'])) {
-            $session = unserialize($_SESSION['edit']);
-        }
-
-        $form = new MessageForm();
-        $form->get('submit')->setValue('Review');
-
-        // If GET param `id`, check if member exist;
-        // if member exist, pass the entity into the view
         $id = $this->params()->fromRoute('id', null);
         if ($id) {
             try {
                 $member = $this->getMemberTable()->getMember($id);
-                // This needs to be a $message
-                //$form->bind($member);
             } catch (\Exception $ex) {
                 throw new \InvalidArgumentException('The member your trying to message doesn\'t exists.');
             }
         }
 
+        $form = new MessageForm();
+        $form->get('submit')->setValue('Review');
+
+        $message = new Message();
+        //$form->setInputFilter($message->getInputFilter());
+        $form->bind($message);
+
         $request = $this->getRequest();
         if ($request->isPost()) {
 
             //return array('post' => $request->getPost());
+            //
+            $form->setValidationGroup(
+                //'name', 'email', 
+                'message_subject', 
+                'message_content',
+                'member_info',
+                'tax_receipt'
+            );
 
-            $message = new Message();
-            $form->setInputFilter($message->getInputFilter());
             $form->setData($request->getPost());
-
             if ($form->isValid()) {
-                //$message->exchangeArray($form->getData());
-                //$this->getMailTable()->saveMessage($message);
 
-                //$data = serialize($form->getData());
-                $data = $form->getData();
-
-                $return_vars = array();
+                // Process maill message for storage
+                $filter = $form->getInputFilter();
+                $data = $filter->getRawValues();
 
                 if ($data['message_subject'] == '') {
                     $data['message_subject'] = 'From the Red Cedar Zen Community';
                 }
-                if (isset($data['member_info'])) {
-                    $return_vars['proofing'] = true;
+                if ( ! isset($data['send_to'])) {
+                    $data['send_to'] = $member->id;
                 }
-                if (isset($data['tax_receipt'])) {
-                    $return_vars['tax_receipt'] = true;
-                    $return_vars['tax_year'] = $data['tax_year'];
+                if ( ! is_numeric($data['send_to']) && !isset($data['location'])) {
+                    $data['location'] = 'all';
+                }
+                foreach ($data as $key => $value) {
+                    if ( ! isset($value) || $key == 'security' || $key == 'submit') {
+                        unset($data[$key]);
+                    }
                 }
 
-                $email = array(
-                    'message'=>$data, 
-                    //'member_id'=>$member->id, 
-                    'option'=>$return_vars
-                );
-                if ($member) {
-                    $email['member_id'] = $member->id;
-                }
-                $_SESSION['review'] = serialize($email);
+                //return array('post' => $data);
 
-                return $this->redirect()->toRoute('mail', array(
-                    'action' => 'review'
+                $message->exchangeArray($data);
+                $message_id = $this->getMailTable()->saveMessage($message);
+
+                return $this->redirect()->toRoute('mail/review', array(
+                    'action' => 'review', 'id' => $message_id
                 ));
-            }/* else {
+            } else {
                 return array('post' => $form->getMessages());
-            }*/
+            }
         }
         if (isset($member)) {
             return array('form' => $form, 'member' => $member);
@@ -129,29 +130,31 @@ class MailController extends AbstractController
 
     public function reviewAction()
     {
-        if (isset($_SESSION['review'])) {
-            $session = unserialize($_SESSION['review']);
-        } else {
-            return $this->redirect()->toRoute('mail', array(
-                'action' => 'member'
-            ));
+        $id = $this->params()->fromRoute('id', null);
+        if ($id) {
+            try {
+                $message = $this->getMailTable()->getMessage($id);
+            } catch (\Exception $ex) {
+                return $this->redirect()->toRoute('mail', array(
+                    'action' => 'member'
+                ));
+            }
         }
 
-        if (isset($session['member_id'])) {
-            $member = $this->getMemberTable()->getMember($session['member_id']);
+        if (is_numeric($message->send_to)) {
+            $member = $this->getMemberTable()->getMember($message->send_to);
             $to = $member->email;
             $group = false;
         } else {
             $member = null;
             $group = true;
-            $to = array('group' => $session['message']['send_to']);
+            $to = array('group' => $message->send_to);
         }
 
         $email = array(
             'to'=> $to,
-            'message'=> $session['message'],
+            'message'=> $message,
             'member'=> $member,
-            'option'=> $session['option']
         );
 
         $post = $this->params()->fromPost();
@@ -160,35 +163,82 @@ class MailController extends AbstractController
             if ($post['action'] == 'Send') {
                 if ($group) {
                     //throw new \Exception('Group Mailing to '.$email['to']['group']);
-                    $this->sendMessageToGroup($email['to']['group'], $email);
+                    $group_members = $this->getMemberTable()->getGroup($email['to']['group']);
+                    $message->sendMessageToGroup($email, $group_members);
                 } else {
                     //throw new \Exception('Shooting message to '.$email['to']);
-                    $this->sendMessageToMember($member, $email);
+                    $message->sendMessage($email, $member->email, $member->getFullName());
                 }
 
-                return $this->redirect()->toRoute('mail', array(
+                return $this->redirect()->toRoute('mail/default', array(
                     'action' => 'sent'
                 ));
             } else if ($post['action'] == 'Edit') {
 
-                $_SESSION['edit'] = serialize($post);
-                unset($_SESSION['review']);
-
-                return $this->redirect()->toRoute('mail', array(
-                    'action' => 'member'
-                ));
+                return $this->redirect()->toRoute('mail/edit', array('id' => $id));
             }
                 
         }
 
-        $view = new ViewModel(array(
-            'to'=> $email['to'],
-            'message'=> $email['message'],
-            'member'=> $email['member'],
-            'option'=> $email['option']
-        ));
+        $view = new ViewModel($email);
         $view->setTemplate('mailer/mail/email-review');
         $view->setTerminal(true);
+        return $view;
+    }
+
+    public function editAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', null);
+        if (!$id) {
+            return $this->redirect()->toRoute('mail', array(
+                'action' => 'member'
+            ));
+        }
+
+        // Get the Member with the specified id.  An exception is thrown
+        // if it cannot be found, in which case go to the index page.
+        try {
+            $message = $this->getMailTable()->getMessage($id);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('mail', array(
+                'action' => 'member'
+            ));
+        }
+
+        $form  = new MessageForm();
+        $form->bind($message);
+        $form->get('submit')->setAttribute('value', 'Review');
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+
+            //$form->setInputFilter($message->getInputFilter());
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+
+                $filter = $form->getInputFilter();
+                $data = $filter->getRawValues();
+                $message->exchangeArray($data);
+                $this->getMailTable()->saveMessage($message);
+
+                return $this->redirect()->toRoute('mail/review', array('action'=>'review', 'id'=>$id));
+            } else {
+                $view = new ViewModel(array('post' => $form->getMessages()));
+                $view->setTemplate('mailer/mail/member');
+                return $view;
+            }
+        }
+
+        if (is_numeric($message->send_to)) {
+            $member = $this->getMemberTable()->getMember($message->send_to);
+            $params = array('form'=>$form, 'member'=>$member);
+        } else {
+            $params = array('form'=>$form);
+        }
+        $view = new ViewModel($params);
+        $view->setTemplate('mailer/mail/member');
         return $view;
     }
 
@@ -197,90 +247,24 @@ class MailController extends AbstractController
         //
     }
 
-    /**
-     * Multi-part sendmail method
-     *
-     * @param  Member   $member  \Member\Model\Member
-     * @param  string[] $message Array containing elements of the message.
-     */
-    protected function sendMessageToMember(Member $member, $email)
+    public function newAction()
     {
-        $header_meta = array(
-           'from' => 'mailings@sanghasoftware.com',
-           'from_name' => 'Red Cedar Zen Community',
-           'reply_to' => 'info@redcedarzen.org',
-           'reply_to_name' => 'Red Cedar Zen Community',
-           //'to' => $member->email,
-           'to' => 'mr.teachman@gmail.com',
-           'to_name' => $member->getFullName(),
-           'subject' => $email['message']['message_subject'],
-        );
+        $form = new MessageForm();
+        $form->get('submit')->setValue('Add');
 
-        $renderer = new PhpRenderer();
-        $map = new Resolver\TemplateMapResolver(array(
-            'group-email' => __DIR__ . '/../../../view/email/group-email.phtml',
-            'text-email'  => __DIR__ . '/../../../view/email/text-email.phtml',
-        ));
-        $renderer->setResolver($map);
-        //$renderer->plugin('basePath')->setBasePath('public');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $message = new Message();
+            $form->setInputFilter($message->getInputFilter());
+            $form->setData($request->getPost());
 
-        $html_view = new ViewModel(array(
-            'to'=> $email['to'],
-            'message'=> $email['message'],
-            'member'=> $email['member'],
-            'option'=> $email['option']
-        ));
-        $html_view->setTemplate('group-email');
+            if ($form->isValid()) {
+                $message->exchangeArray($form->getData());
+                $this->getMailTable()->saveMessage($message);
 
-        $email['message']['message_content'] = strip_tags($email['message']['message_content']);
-        $text_view = new ViewModel(array(
-            'to'=> $email['to'],
-            'message'=> $email['message'],
-            'member'=> $email['member'],
-            'option'=> $email['option']
-        ));
-        $text_view->setTemplate('text-email');
-
-        try {
-            // defined in TWeb\Controller\AbstractController
-            $this->sendMultiPartMail(
-                $header_meta, 
-                $renderer->render($html_view), 
-                $renderer->render($text_view)
-            );
-        } catch (Exception $e) {
-            //log it or something
-        }
-    }
-
-    /**
-     * Multi-part sendmail method
-     * 
-     * @param  string[] $info Array containing elements of the message.
-     * @return object[]       Returns array of Member\Model\Members
-     */
-    protected function sendMessageToGroup($group_name, $email)
-    {
-        $mail_list = new \ArrayObject;
-        $groups = array(
-            'member', 'friends', 
-            'members_friends', 
-            'mailing_list', 
-            'everyone'
-        );
-
-        try {
-            $members = $this->getMemberTable()->getGroupOfMembers($group_name);
-            foreach ($members as $member) {
-                if ($member->email) {
-                    $mail_list->append($member);
-                    $this->sendMessageToMember($member, $email);
-                }
+                return $this->redirect()->toRoute('mail', array('action'=>'sent'));
             }
-        } catch (Exception $e) {
-            //log it or something
         }
-
-        return $mail_list;
+        return array('form' => $form);
     }
 }

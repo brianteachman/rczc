@@ -33,13 +33,12 @@ class MessageTable
     public function saveMessage(Message $message)
     {
         $data = array(
-            'id' => $message->id,
             'message_subject' => $message->message_subject,
             'message_content' => $message->message_content,
             'member_info' => $message->member_info,
             'tax_receipt' => $message->tax_receipt,
             'tax_year' => $message->tax_year,
-            'membership_type' => $message->membership_type,
+             /* can be null */
             'send_to' => $message->send_to,
             'location' => $message->location,
         );
@@ -47,11 +46,13 @@ class MessageTable
         $id = (int)$message->id;
         if ($id == 0) {
             $this->tableGateway->insert($data);
+            return $this->tableGateway->lastInsertValue;
         } else {
             if ($this->getMessage($id)) {
                 $this->tableGateway->update($data, array('id' => $id));
+                return $id;
             } else {
-                throw new \Exception('Form id does not exist');
+                throw new \Exception('Message id does not exist');
             }
         }
     }

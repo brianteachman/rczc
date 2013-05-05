@@ -1,6 +1,6 @@
 <?php
 
-$title = 'Send Email Announcement for Red Cedar Zen Community';
+$title = 'Send Email Announcement';
 $this->headTitle($title);
 
 $this->headScript()->prependFile($this->basePath() . '/tinymce/tinymce.min.js');
@@ -17,37 +17,32 @@ tinyMCE.init({
 
 <?php else: ?>
 
-<h1><?php echo $this->escapeHtml($title); ?></h1>
 <?php
 $form = $this->form;
 //$form->setAttribute('action', $this->url('mail', array('action' => 'review')));
 $form->prepare();
 
-echo $this->form()->openTag($form);
-
-//echo ;
-echo $this->formRow($form->get('security')) . '<br>';
+echo $this->form()->openTag($form) . "\n";
+echo "\t" . $this->formRow($form->get('security')) . '<br>';
 ?>
 
-<hr>
     <div id="MessagePanel">
+        <?php if ($form->get('id')): ?>
+        <?= $this->formHidden($form->get('id')) ?>
+        <?php endif; ?>
 
     <?php if ($this->member): ?>
-        
         <div id="SendToMember">
-            <h2>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h2>
+            <h1>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h1>
+            <input type="hidden" name="send_to" value="<?= $this->member->id ?>">
         </div>
-        <?= $this->formHidden($form->get('id')) ?>
-        <input type="hidden" name="id" value="<?= $this->member->id ?>">
+
 
     <?php else: ?>
 
         <div id="SendToGroup">
-            <h2>Send to:</h2>
-
-            <em>Membership:</em>
-                <?= $this->formRow($form->get('send_to')) ?>
-                <br>
+            <h1>Send to: <span style="font-size: large;"><?= $this->formRow($form->get('send_to')) ?></span></h1>
+            <br>
                 
             <em>Location:</em>
                 <?= $this->formRow($form->get('location')) ?>
@@ -56,7 +51,7 @@ echo $this->formRow($form->get('security')) . '<br>';
     <?php endif; ?>
     <!-- -->
 
-        <br>
+        <hr>
 
         <div ID="SubjectPanel">
             <h2>Subject:</h2> 

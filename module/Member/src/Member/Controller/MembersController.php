@@ -58,7 +58,7 @@ class MembersController extends AbstractActionController
                 $member->exchangeArray($form->getData());
                 $this->getMemberTable()->saveMember($member);
 
-                // Redirect to list of albums
+                // Redirect to list of members
                 return $this->redirect()->toRoute('members');
             }
         }
@@ -97,7 +97,6 @@ class MembersController extends AbstractActionController
             if ($form->isValid()) {
                 $this->getMemberTable()->saveMember($form->getData());
 
-                // Redirect to list of albums
                 return $this->redirect()->toRoute('members');
             }
         }
@@ -125,7 +124,7 @@ class MembersController extends AbstractActionController
                 $this->getMemberTable()->deleteMember($id);
             }
 
-            // Redirect to list of albums
+            // Redirect to list of members
             return $this->redirect()->toRoute('members');
         }
 

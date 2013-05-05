@@ -37,10 +37,10 @@ class MemberTable
      * @param  string $group_name Membership group
      * @return Zend\Db\ResultSet
      */
-    public function getGroupOfMembers($group_name)
+    public function getGroup($group_name, $email_exists=false)
     {
         $groups = array(
-            'member', 'friends', 
+            'members', 'friends', 
             'members_friends', 
             'mailing_list', 
             'everyone'
