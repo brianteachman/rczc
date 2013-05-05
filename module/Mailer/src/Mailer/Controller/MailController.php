@@ -199,6 +199,9 @@ class MailController extends AbstractController
         // if it cannot be found, in which case go to the index page.
         try {
             $message = $this->getMailTable()->getMessage($id);
+            if (is_numeric($message->send_to)) {
+                $member = $this->getMemberTable()->getMember($message->send_to);
+            }
         }
         catch (\Exception $ex) {
             return $this->redirect()->toRoute('mail', array(
@@ -220,6 +223,9 @@ class MailController extends AbstractController
 
                 $filter = $form->getInputFilter();
                 $data = $filter->getRawValues();
+                if ( ! isset($data['send_to'])) {
+                    $data['send_to'] = $member->id;
+                }
                 $message->exchangeArray($data);
                 $this->getMailTable()->saveMessage($message);
 
@@ -231,8 +237,7 @@ class MailController extends AbstractController
             }
         }
 
-        if (is_numeric($message->send_to)) {
-            $member = $this->getMemberTable()->getMember($message->send_to);
+        if (isset($member)) {
             $params = array('form'=>$form, 'member'=>$member);
         } else {
             $params = array('form'=>$form);
@@ -245,26 +250,5 @@ class MailController extends AbstractController
     public function sentAction()
     {
         //
-    }
-
-    public function newAction()
-    {
-        $form = new MessageForm();
-        $form->get('submit')->setValue('Add');
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $message = new Message();
-            $form->setInputFilter($message->getInputFilter());
-            $form->setData($request->getPost());
-
-            if ($form->isValid()) {
-                $message->exchangeArray($form->getData());
-                $this->getMailTable()->saveMessage($message);
-
-                return $this->redirect()->toRoute('mail', array('action'=>'sent'));
-            }
-        }
-        return array('form' => $form);
     }
 }

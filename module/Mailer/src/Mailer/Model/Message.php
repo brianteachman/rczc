@@ -92,7 +92,7 @@ class Message extends Email implements InputFilterAwareInterface
             // Between 1 and 32 characters
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'send_to',
-                'required' => true,
+                'required' => false,
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),

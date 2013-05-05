@@ -34,7 +34,7 @@ echo "\t" . $this->formRow($form->get('security')) . '<br>';
     <?php if ($this->member): ?>
         <div id="SendToMember">
             <h1>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h1>
-            <input type="hidden" name="send_to" value="<?= $this->member->id ?>">
+            <?php /*<input type="hidden" name="send_to" value="<?= $this->member->id ?>">*/ ?>
         </div>
 
 
