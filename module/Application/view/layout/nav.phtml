@@ -24,7 +24,7 @@
                                     <a href="<?php $this->basePath() ?>/mail/member">New Message</a>
                                 </li>
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-842">
-                                    <a href="<?php $this->basePath() ?>/mail/archive">Sent Messages</a>
+                                    <a href="<?php $this->basePath() ?>/mail/logs">Message Log</a>
                                 </li>
                             </ul>
                         </li>
@@ -39,8 +39,8 @@
                         </li>
                     </ul>
 
-                    <form action="/members" method="get" id="member_search" style="float:right;">
-                        <input type="search" name="search">
+                    <form action="/members" method="get" id="member_search" style="float:right;" >
+                        <input type="search" name="search" placeholder="Member Search">
                         <input type="submit" value="Search">
                     </form>
                 </div>

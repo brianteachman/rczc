@@ -1,0 +1,45 @@
+<?php
+$title = 'Message Logs';
+$this->headTitle($title);
+?>
+<?php $this->headStyle()->captureStart() ?>
+.picker-bar > form {
+    width: 100%;
+}
+.picker > input {
+    1color: Black;
+    1background-color: LightCyan;
+    border: solid 1px gray;
+    width: 30px;
+}
+.picker > input.selected {
+     color: White;
+     background-color: Gray;
+}
+<?php $this->headStyle()->captureEnd();
+?>
+<h1><?php echo $this->escapeHtml($title); ?> (<?= count($messages) ?> total)</h1>
+<hr>
+
+
+<table class="table">
+<tr>
+    <th>SENT TO</th>
+    <!--<th>FROM</th>-->
+    <th>SUBJECT</th>
+    <th>DATE SENT</th>
+    <th></th>
+</tr>
+<?php foreach ($messages as $message) : ?>
+<tr id="<?php echo $this->escapeHtml($message['id']) ?>">
+    <td><?php echo $this->escapeHtml($message['send_to']) ?></td>
+    <?php /* <td><?php echo $this->escapeHtml($message['from']);?></td> */ ?>
+    <td><?php echo $this->escapeHtml($message['message_subject']) ?></td>
+    <td><?php echo $this->escapeHtml($message['sent']) ?></td>
+    <td>
+        <a href="<?php echo $this->url('mail/edit', array('id' => $message['id'])) ?>">Edit</a>
+    </td>
+</tr>
+
+<?php endforeach; ?>
+</table>

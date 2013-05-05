@@ -251,4 +251,25 @@ class MailController extends AbstractController
     {
         //
     }
+
+    public function logsAction()
+    {
+        $messages = array();
+
+        $results = $this->getMailTable()->fetchAll();
+        foreach ($results as $row) {
+            $message = array(
+                'id' => $row->id,
+                'send_to' => $row->send_to,
+                'message_subject' => $row->message_subject,
+                'sent' => $row->sent,
+            );
+            if (is_numeric($message['send_to'])) {
+                $member = $this->getMemberTable()->getMember($message['send_to']);
+                $message['send_to'] = $member->getFullName();
+            }
+            array_push($messages, $message);
+        }
+        return array('messages' => $messages);
+    }
 }

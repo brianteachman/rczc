@@ -30,6 +30,7 @@ class Message extends Email implements InputFilterAwareInterface
     public $tax_year;
     public $send_to;
     public $location;
+    public $sent;
 
     private $inputFilter;
 
@@ -52,6 +53,7 @@ class Message extends Email implements InputFilterAwareInterface
         $this->membership_type  = (isset($data['membership_type'])) ? $data['membership_type'] : null;
         $this->send_to  = (isset($data['send_to'])) ? $data['send_to'] : null;
         $this->location  = (isset($data['location'])) ? $data['location'] : null;
+        $this->sent  = (isset($data['sent'])) ? $data['sent'] : null;
     }
 
     /**
@@ -167,6 +169,11 @@ class Message extends Email implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'tax_year',
+                'required' => false,
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'sent',
                 'required' => false,
             )));
 
