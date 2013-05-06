@@ -43,8 +43,6 @@ class MemberTable
     }
 
     /**
-     * @todo Update table so email without value is NULL
-     * 
      * @param  string $group_name Membership group
      * @return Zend\Db\ResultSet
      */
@@ -52,32 +50,32 @@ class MemberTable
     {
         // membership_type map
         $groups = array(
-            'members' => 3, 
-            'friends' => 2, 
-            'members_friends', 
             'mailing_list' => 1, 
-            'everyone'
+            'friends' => 2, 
+            'members' => 3, 
         );
 
         $predicate = new  Where();
 
         switch ($group_name) {
             case 'members':
-                $predicate->expression('membership_type = ?', 3);
+                $predicate->expression('membership_type = ?', $groups['members']);
                 break;
             
             case 'friends':
-                $predicate->expression('membership_type = ?', 2);
+                $predicate->expression('membership_type = ?', $groups['friends']);
                 break;
             
             case 'members_friends':
-                $predicate->expression('membership_type = ?', 2)
+                $predicate->NEST
+                          ->expression('membership_type = ?', $groups['friends'])
                           ->or
-                          ->expression('membership_type = ?', 3);
+                          ->expression('membership_type = ?', $groups['members'])
+                          ->UNNEST;
                 break;
             
             case 'mailing_list':
-                $predicate->expression('membership_type = ?', 1);
+                $predicate->expression('membership_type = ?', $groups['mailing_list']);
                 break;
 
             case 'everyone':
@@ -88,10 +86,10 @@ class MemberTable
                 break;
         }
 
-        if ($location === false) { /* remote */
-            $predicate->and->expression('is_local = ?', 0);
-        } else if ($location === true) {   /* local */
-            $predicate->and->expression('is_local = ?', 1);
+        if ($location == 'remote') {
+            $predicate->and->equalTo('is_local', 0);
+        } else if ($location == 'local') {
+            $predicate->and->equalTo('is_local', 1);
         }
 
         if ($email_exists === true) {

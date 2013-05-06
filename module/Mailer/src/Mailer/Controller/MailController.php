@@ -16,8 +16,8 @@ use Mailer\Form\MessageForm;
  * /mail
  * /mail/member/:id
  * /mail/members
- * /mail/review
- * /mail/edit
+ * /mail/review/:id
+ * /mail/edit/:id
  * /mail/sent
  */
 class MailController extends AbstractController
@@ -172,7 +172,7 @@ class MailController extends AbstractController
                     /**
                      * Testing view script
                      */
-                    return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
+                    //return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
 
                     $message->sendMessageToGroup($email, $group_members);
                 } else {
@@ -190,10 +190,7 @@ class MailController extends AbstractController
                 
         }
 
-        $view = new ViewModel($email);
-        $view->setTemplate('mailer/mail/email-review');
-        $view->setTerminal(true);
-        return $view;
+        return $this->makeView($email, 'mailer/mail/email-review', true);
     }
 
     public function editAction()
@@ -252,6 +249,7 @@ class MailController extends AbstractController
         } else {
             $params = array('form'=>$form);
         }
+
         $view = new ViewModel($params);
         $view->setTemplate('mailer/mail/member');
         return $view;
