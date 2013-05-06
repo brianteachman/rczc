@@ -163,10 +163,17 @@ class MailController extends AbstractController
             if ($post['action'] == 'Send') {
                 if ($group) {
                     //throw new \Exception('Group Mailing to '.$email['to']['group']);
-                    $group_members = $this->getMemberTable()->getGroup($email['to']['group']);
+                    $group_members = $this->getMemberTable()->getGroup(
+                        $email['to']['group'], 
+                        $message->location,
+                        true
+                    );
 
-                    //return array('post' => $group_members);
-                    
+                    /**
+                     * Testing view script
+                     */
+                    return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
+
                     $message->sendMessageToGroup($email, $group_members);
                 } else {
                     //throw new \Exception('Shooting message to '.$email['to']);
@@ -264,8 +271,9 @@ class MailController extends AbstractController
             $message = array(
                 'id' => $row->id,
                 'send_to' => $row->send_to,
+                //'from' => $user->name,
                 'message_subject' => $row->message_subject,
-                'sent' => $row->sent,
+                'sent' => date("m/d/Y g:ia", strtotime($row->sent)), /* 05/04/2013 10:57pm */
             );
             if (is_numeric($message['send_to'])) {
                 $member = $this->getMemberTable()->getMember($message['send_to']);

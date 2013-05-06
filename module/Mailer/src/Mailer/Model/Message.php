@@ -23,13 +23,14 @@ class Message extends Email implements InputFilterAwareInterface
 {
     // Message fields
     public $id;
+    public $from;
+    public $send_to;
+    public $location;
     public $message_subject;
     public $message_content;
     public $member_info;
     public $tax_receipt;
     public $tax_year;
-    public $send_to;
-    public $location;
     public $sent;
 
     private $inputFilter;
@@ -45,14 +46,14 @@ class Message extends Email implements InputFilterAwareInterface
     public function exchangeArray($data)
     {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->from = (isset($data['from'])) ? $data['from'] : null;
+        $this->send_to  = (isset($data['send_to'])) ? $data['send_to'] : null;
+        $this->location  = (isset($data['location'])) ? $data['location'] : null;
         $this->message_subject = (isset($data['message_subject'])) ? $data['message_subject'] : null;
         $this->message_content = (isset($data['message_content'])) ? $data['message_content'] : null;
         $this->member_info  = (isset($data['member_info'])) ? $data['member_info'] : null;
         $this->tax_receipt  = (isset($data['tax_receipt'])) ? $data['tax_receipt'] : null;
         $this->tax_year  = (isset($data['tax_year'])) ? $data['tax_year'] : null;
-        $this->membership_type  = (isset($data['membership_type'])) ? $data['membership_type'] : null;
-        $this->send_to  = (isset($data['send_to'])) ? $data['send_to'] : null;
-        $this->location  = (isset($data['location'])) ? $data['location'] : null;
         $this->sent  = (isset($data['sent'])) ? $data['sent'] : null;
     }
 
@@ -88,6 +89,26 @@ class Message extends Email implements InputFilterAwareInterface
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'Int'),
+                ),
+            )));
+
+            // Between 1 and 32 characters
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'from',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 70,
+                        ),
+                    ),
                 ),
             )));
 

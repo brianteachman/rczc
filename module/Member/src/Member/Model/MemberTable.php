@@ -3,6 +3,7 @@ namespace Member\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
 
 class MemberTable
 {
@@ -47,58 +48,58 @@ class MemberTable
      * @param  string $group_name Membership group
      * @return Zend\Db\ResultSet
      */
-    public function getGroup($group_name, $email_exists=false)
+    public function getGroup($group_name, $location=null, $email_exists=false)
     {
+        // membership_type map
         $groups = array(
-            'members', 'friends', 
+            'members' => 3, 
+            'friends' => 2, 
             'members_friends', 
-            'mailing_list', 
+            'mailing_list' => 1, 
             'everyone'
         );
 
-        if (in_array($group_name, $groups)) {
-            switch ($group_name) {
-                case 'members':
-                    return $this->tableGateway->select(
-                        array(
-                            'membership_type' => 3,
-                            new \Zend\Db\Sql\Predicate\IsNotNull('email')
-                        )
-                    );
-                    break;
-                
-                case 'friends':
-                    return $this->tableGateway->select(
-                        array(
-                            'membership_type' => 2,
-                            new \Zend\Db\Sql\Predicate\IsNotNull('email')
-                        )
-                    );
-                    break;
-                
-                case 'members_friends':
-                    $sel = '`membership_type` = 2 OR `membership_type` = 3';
-                    return $this->tableGateway->select($sel);
-                    break;
-                
-                case 'mailing_list':
-                    return $this->tableGateway->select(
-                        array(
-                            'membership_type' => 1,
-                            new \Zend\Db\Sql\Predicate\IsNotNull('email')
-                        )
-                    );
-                    break;
+        $predicate = new  Where();
 
-                case 'everyone':
-                //default: /* everyone */
-                    $sel = array(new \Zend\Db\Sql\Predicate\IsNotNull('email'));
-                    return $this->tableGateway->select($sel);
-                    break;
-            }
-        } else {
-            throw new \Exception("Query is not in the groups array.");
+        switch ($group_name) {
+            case 'members':
+                $predicate->expression('membership_type = ?', 3);
+                break;
+            
+            case 'friends':
+                $predicate->expression('membership_type = ?', 2);
+                break;
+            
+            case 'members_friends':
+                $predicate->expression('membership_type = ?', 2)
+                          ->or
+                          ->expression('membership_type = ?', 3);
+                break;
+            
+            case 'mailing_list':
+                $predicate->expression('membership_type = ?', 1);
+                break;
+
+            case 'everyone':
+                break;
+
+            default:
+                throw new \Exception("Query is not in the groups array.");
+                break;
         }
+
+        if ($location === false) { /* remote */
+            $predicate->and->expression('is_local = ?', 0);
+        } else if ($location === true) {   /* local */
+            $predicate->and->expression('is_local = ?', 1);
+        }
+
+        if ($email_exists === true) {
+            $predicate->and->expression('email != ?', '')
+                      ->and->isNotNull('email');
+        }
+
+        return $this->tableGateway->select($predicate);
     }
 
     /**

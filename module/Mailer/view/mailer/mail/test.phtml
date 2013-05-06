@@ -1,0 +1,25 @@
+<?php $this->headTitle('Var test script') ?>
+
+<?php if (isset($this->post)): ?>
+
+    <h4><?= count($this->post) ?> elements</h4>
+    <?php foreach($this->post as $what): ?>
+     
+        <!--<pre><?php //var_dump($what->getArrayCopy()) ?></pre>-->
+        <ul>
+            <li><?php echo sprintf("%s, %s &lt;%s&gt;, %s, %s", 
+                $what->id, 
+                $what->getFullName(), 
+                $what->email,
+                $what->getMemberType(), 
+                $what->is_local) ?>
+            </li>
+        </ul>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
+
+    <?php var_dump($this->message) ?>
+
+<?php endif; ?>
