@@ -220,8 +220,8 @@ class Message extends Email implements InputFilterAwareInterface
            'from_name' => 'Red Cedar Zen Community',
            'reply_to' => 'info@redcedarzen.org',
            'reply_to_name' => 'Red Cedar Zen Community',
-           //'to' => $member_email,
-           'to' => 'mr.teachman@gmail.com',
+           'to' => $member_email,
+           //'to' => 'mr.teachman@gmail.com',
            'to_name' => $member_name,
            'subject' => $message->message_subject,
         );
