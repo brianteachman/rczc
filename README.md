@@ -25,12 +25,6 @@ available.)
 You would then invoke `composer` to install dependencies per the previous
 example.
 
-Using Git submodules
---------------------
-Alternatively, you can install using native git submodules:
-
-    git clone git@github.com:brianteachman/rczc.git --recursive
-
 Virtual Host
 ------------
 Afterwards, set up a virtual host to point to the public/ directory of the
