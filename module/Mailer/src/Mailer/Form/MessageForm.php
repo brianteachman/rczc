@@ -68,7 +68,7 @@ class MessageForm extends Form
             'name' => 'tax_year',
             'options' => array(
                 //'label' => 'tax_year',
-                'empty_option' => '...',
+                //'empty_option' => '...',
                 'value_options' => array(
                     '2013' => '2013',
                     '2012' => '2012',

@@ -409,11 +409,12 @@ $this->headTitle($title);
                                                                 
                                                                 <?= $this->message->message_content ?>
 
-                                                                <?php if ($this->message->member_info == 1 && $this->member): ?>
+                                                                <?php if ($this->message->member_info == 1): ?>
 
                                                                 <br /><hr />
                                                                 <!-- member.info start -->
                                                                 <table border='0' width=100%>
+                                                                    <?php if ($this->member): ?>
                                                                     <tr>
                                                                         <td>
                                                                             <b><?= $this->member->getFullName() ?></b> - <?= $this->member->getMemberType() ?><br />
@@ -430,6 +431,25 @@ $this->headTitle($title);
                                                                             </span>
                                                                         </td>
                                                                     </tr>
+                                                                    <?php else: ?>
+                                                                    <tr><em>Info below will be replaced with each members info.</em></tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <b>Member Name</b> - Member Type<br />
+                                                                            <span class="smalltext">
+                                                                                Volunteering: Jobs/Roles volunteered for... <br />
+                                                                                Interested in: Volunteer opurtunities interested in.
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="smalltext">
+                                                                                Member Address <br /
+                                                                                <i>home:</i> Phone Number <br />
+                                                                                Email Address
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php endif; ?>
                                                                 </table>
                                                                 <!-- member.info end -->
                                                                 <?php endif; ?>

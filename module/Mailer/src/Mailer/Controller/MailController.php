@@ -172,7 +172,7 @@ class MailController extends AbstractController
                     /**
                      * Testing view script
                      */
-                    //return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
+                    return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
 
                     $message->sendMessageToGroup($email, $group_members);
                 } else {
