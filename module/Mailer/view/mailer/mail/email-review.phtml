@@ -357,7 +357,8 @@ $this->headTitle($title);
                                         	<td valign="top">
                                             	<div mc:edit="std_preheader_content">
                                                     <span hidden>
-                                                	 We support practice with a spirit of cooperation, extending the essence of Buddha’s teachings into everyday life.</span>
+                                                        <?= $this->message->getSnippet(100) ?>
+                                                    </span>
                                                 </div>
                                             </td>
                                             <!-- *|IFNOT:ARCHIVE_PAGE|* -->
@@ -500,9 +501,18 @@ $this->headTitle($title);
                                                                 To reach resident priest Nomon Tim Burnett write to <a href='mailto:tim@redcedarzen.org'>tim@redcedarzen.org</a>
                                                             </div>
                                                         </td>
-                                                        <td valign="middle" id="social">
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" valign="middle" id="social">
                                                             <div mc:edit="std_social">
-                                                                &nbsp;<a href="https://www.facebook.com/pages/Red-Cedar-Zen-Community/379108162045" title="find us on Facebook"><img src="<?= $this->serverUrl() ?>/img/facebook_logo.jpg" alt="" width="150px" /></a>&nbsp;
+                                                                &nbsp;<a href="https://www.facebook.com/pages/Red-Cedar-Zen-Community/379108162045" title="find us on Facebook">find us on Facebook</a>&nbsp;
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div valign="middle" style="font-size:x-small;">
+                                                                We support practice with a spirit of cooperation, extending the essence of Buddha’s teachings into everyday life.
                                                             </div>
                                                         </td>
                                                     </tr>

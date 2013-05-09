@@ -23,7 +23,7 @@ class MessageForm extends Form
             'attributes' => array(
                 'type'  => 'text',
                 'placeholder' => 'From the Red Cedar Zen Community',
-                'style' => "width:100%;"
+                'style' => "width:92%;"
             ),/*
             'options' => array(
                 'label' => 'First Name',

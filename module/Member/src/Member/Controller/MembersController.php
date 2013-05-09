@@ -10,6 +10,17 @@ use Zend\View\Model\ViewModel;
 use Member\Model\Member;
 use Member\Form\MemberForm;
 
+/**
+ * /members
+ * /members/add
+ * /members/edit/:id
+ * /members/delete/:id
+ * /members/roles
+ * /members/roles/edit/:id
+ * /members/directory
+ * /members/directory-view
+ * /members/labels
+ */
 class MembersController extends AbstractActionController
 {
     protected $memberTable;
@@ -87,7 +98,7 @@ class MembersController extends AbstractActionController
 
         $form  = new MemberForm();
         $form->bind($member);
-        $form->get('submit')->setAttribute('value', 'Edit');
+        $form->get('submit')->setAttribute('value', 'Save');
 
         $request = $this->getRequest();
         if ($request->isPost()) {

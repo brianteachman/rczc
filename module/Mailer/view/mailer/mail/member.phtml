@@ -3,13 +3,14 @@
 $title = 'Send Email Announcement';
 $this->headTitle($title);
 
-$this->headScript()->prependFile($this->basePath() . '/tinymce/tinymce.min.js');
+$this->headScript()->prependFile($this->basePath() . '/js/tinymce/tinymce.min.js');
+$this->headScript()->appendFile($this->basePath() . '/js/tinymce-v4.editor.js');
 ?>
-<?php $this->InlineScript()->captureStart(); ?>
-tinyMCE.init({
-        mode : "textareas"
-});
-<?php $this->InlineScript()->captureEnd(); ?>
+<?php $this->headStyle()->captureStart() ?>
+#main tr td {
+    padding: 0px;
+}
+<?php $this->headStyle()->captureEnd() ?>
 
 <?php if ($this->post): ?>
 
@@ -53,25 +54,27 @@ echo "\t" . $this->formRow($form->get('security')) . '<br>';
 
         <hr>
 
-        <div ID="SubjectPanel">
-            <h2>Subject:</h2> 
-            <?= $this->formRow($form->get('message_subject')) ?>
-        </div>
-
-        <!-- rich text editor -->
-        <?= $this->formRow($form->get('message_content')) ?>
-        
-        <br>
-
-        <div class="smalltext">
-            <b>Membership Use Only:</b>
+        <div ID="Message">
+            <div class="subject">
+                <span style="font-size:1.2em; font-weight:normal;font-family: Baskerville,Georgia,'Times New Roman',Times,serif;">Subject: </span> <?= $this->formRow($form->get('message_subject')) ?>
+            </div>
             <br>
+
+            <span style="font-size:1.2em; font-weight:normal;font-family: Baskerville,Georgia,'Times New Roman',Times,serif;">Message: </span> <br>
+            <?= $this->formRow($form->get('message_content')) ?>
             
-            <?= $this->formRow($form->get('member_info')) ?> Sangha Directory Proofing - append each person's contact info to the message they receive.
             <br>
- 
-            <?= $this->formRow($form->get('tax_receipt')) ?> Tax Receipt for 
-            <?= $this->formRow($form->get('tax_year')) ?> - append tax receipt wording to the end of the email.)
+
+            <div class="smalltext">
+                <b>Membership Use Only:</b>
+                <br>
+                
+                <?= $this->formRow($form->get('member_info')) ?> Sangha Directory Proofing - append each person's contact info to the message they receive.
+                <br>
+     
+                <?= $this->formRow($form->get('tax_receipt')) ?> Tax Receipt for 
+                <?= $this->formRow($form->get('tax_year')) ?> - append tax receipt wording to the end of the email.
+            </div>
         </div>
 
         <p>NOTE: To send a message to an individual person using this system, go to the <a href="<?php echo $this->url('members', array('action'=>'index'));?>">Mailing List</a> and click on the person's email address.</p>

@@ -35,6 +35,12 @@ class Message extends Email implements InputFilterAwareInterface
 
     private $inputFilter;
 
+    public function getSnippet($length)
+    {
+        $clean_content = strip_tags($this->message_content);
+        return substr($clean_content, 0, $length);
+    }
+
     /**
      * Zend\Stdlib\Hydrator\ArraySerializable contract method
      * 
@@ -51,6 +57,7 @@ class Message extends Email implements InputFilterAwareInterface
         $this->location  = (isset($data['location'])) ? $data['location'] : null;
         $this->message_subject = (isset($data['message_subject'])) ? $data['message_subject'] : null;
         $this->message_content = (isset($data['message_content'])) ? $data['message_content'] : null;
+        //$this->message_content = (isset($data['message_content'])) ? htmlspecialchars($data['message_content']) : null;
         $this->member_info  = (isset($data['member_info'])) ? $data['member_info'] : null;
         $this->tax_receipt  = (isset($data['tax_receipt'])) ? $data['tax_receipt'] : null;
         $this->tax_year  = (isset($data['tax_year'])) ? $data['tax_year'] : null;
