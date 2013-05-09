@@ -2,6 +2,8 @@
 namespace Mailer\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
 
 class MessageTable
 {
@@ -15,7 +17,11 @@ class MessageTable
     public function fetchAll()
     {
         // returns Zend\Db\ResultSet\ResultSet
-        $resultSet = $this->tableGateway->select();
+        //$resultSet = $this->tableGateway->select($select);
+        $resultSet = $this->tableGateway->select(function (Select $select) {
+             //$select->where->like('last_name', $letter.'%');
+             $select->order('sent DESC');
+        });
         return $resultSet;
     }
 

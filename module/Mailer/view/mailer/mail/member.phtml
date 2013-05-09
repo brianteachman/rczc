@@ -6,11 +6,6 @@ $this->headTitle($title);
 $this->headScript()->prependFile($this->basePath() . '/js/tinymce/tinymce.min.js');
 $this->headScript()->appendFile($this->basePath() . '/js/tinymce-v4.editor.js');
 ?>
-<?php $this->headStyle()->captureStart() ?>
-#main tr td {
-    padding: 0px;
-}
-<?php $this->headStyle()->captureEnd() ?>
 
 <?php if ($this->post): ?>
 
