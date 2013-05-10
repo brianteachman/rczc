@@ -187,7 +187,6 @@ class MailController extends AbstractController
 
                 return $this->redirect()->toRoute('mail/edit', array('id' => $id));
             }
-                
         }
 
         return $this->makeView($email, 'mailer/mail/email-review', true);

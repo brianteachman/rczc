@@ -37,9 +37,13 @@ class MembersController extends AbstractActionController
 
     public function indexAction()
     {
-        if (isset($_GET['picker'])) {
-            $letter = $_GET['picker'];
+        if ( ! isset($_GET['sort_by'])) {
+            unset($_SESSION['sort_by']);
+        }
+        if (isset($_GET['sort_by'])) {
+            $letter = $_GET['sort_by'];
             $members = $this->getMemberTable()->getStartsWith($letter);
+            $_SESSION['sort_by'] = $letter;
 
         } elseif (isset($_GET['search'])) {
             $q = $_GET['search'];
@@ -78,6 +82,12 @@ class MembersController extends AbstractActionController
 
     public function editAction()
     {
+        // if request from a sorted member search, store it.
+        $sort_by = null;
+        if (isset($_SESSION['sort_by'])) {
+            $sort_by = $_SESSION['sort_by'];
+        }
+
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('members', array(
@@ -116,6 +126,7 @@ class MembersController extends AbstractActionController
             'id' => $id,
             'name' => sprintf("%s %s", $member->first_name, $member->last_name),
             'form' => $form,
+            'sort_by' => $sort_by,
         );
     }
 
@@ -215,5 +226,39 @@ class MembersController extends AbstractActionController
     {
         $members = $this->getMemberTable()->getMemberRoles();
         return array('members' => $members);
+    }
+
+    public function roleEditAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('members/roles');
+        }
+
+        // Get the Member with the specified id.  An exception is thrown
+        // if it cannot be found, in which case go to the index page.
+        try {
+            $member = $this->getMemberTable()->getMember($id);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('members/roles');
+        }
+        
+        $form  = new MemberForm();
+        $form->bind($member);
+        $form->get('submit')->setAttribute('value', 'Save');
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setInputFilter($member->getInputFilter());
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+                $this->getMemberTable()->saveMember($form->getData());
+
+                return $this->redirect()->toRoute('members/roles');
+            }
+        }
+        return array('form'=>$form, 'member'=>$member);
     }
 }

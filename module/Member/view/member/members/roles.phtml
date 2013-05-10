@@ -2,22 +2,9 @@
 $title = 'Roles of Sangha Members';
 $this->headTitle($title);
 ?>
-<?php $this->headStyle()->captureStart() ?>
-.picker-bar > form {
-    width: 100%;
-}
-.picker > input {
-    1color: Black;
-    1background-color: LightCyan;
-    border: solid 1px gray;
-    width: 30px;
-}
-.picker > input.selected {
-     color: White;
-     background-color: Gray;
-}
-<?php $this->headStyle()->captureEnd();
-?>
+<?php //$this->headStyle()->captureStart() ?>
+
+<?php //$this->headStyle()->captureEnd() ?>
 <h1><?php echo $this->escapeHtml($title); ?> (<?= count($members) ?> total)</h1>
 <hr>
 
@@ -34,8 +21,8 @@ $this->headTitle($title);
     <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
     <td><?php echo $this->escapeHtml($member->sangha_jobs);?></td>
     <td>
-        <a href="<?php echo $this->url('members',
-            array('action'=>'edit', 'id' => $member->id));?>">Edit</a>
+        <a href="<?php echo $this->url('members/role-edit',
+            array('id' => $member->id));?>">Edit</a>
     </td>
 </tr>
 

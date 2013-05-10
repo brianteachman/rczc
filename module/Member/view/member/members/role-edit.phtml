@@ -1,0 +1,63 @@
+<?php
+
+$title = "Edit " . $this->member->getFullName() . "'s Sangha Role/s.";
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(
+    'members/role-edit',
+    array(
+        'id'     => $this->id,
+    )
+));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('security')) . '<br>';
+?>
+
+<table border=1>
+
+    <tr>
+        <td align="right">Current Sangha Job(s) </td>
+        <td colSpan=3>
+            <?= $this->formRow($form->get('sangha_jobs')) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td align="right">Volunteer Interests </td>
+        <td colSpan=3>
+            <?= $this->formRow($form->get('volunteer_interests')) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td align="right">
+            Membership Notes
+        </td>
+        <td colSpan=3>
+            <?= $this->formRow($form->get('membership_notes')) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td align="right" colSpan=2>
+
+            <?= $this->formRow($form->get('submit')) ?> 
+            &emsp;|&emsp;
+            <button type="submit" formaction="/members/roles">Return to list</button>
+
+        </td>
+    </tr>
+
+</table>
+
+<?php
+echo $this->form()->closeTag();

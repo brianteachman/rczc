@@ -23,33 +23,33 @@ $this->headTitle($title);
 
 <div class="picker-bar">
     <form id="Picker" class="picker">
-        <input type="submit" name="picker" value="" class="selected">
-        <input type="submit" name="picker" value="?">
-        <input type="submit" name="picker" value="A">
-        <input type="submit" name="picker" value="B">
-        <input type="submit" name="picker" value="C">
-        <input type="submit" name="picker" value="D">
-        <input type="submit" name="picker" value="E">
-        <input type="submit" name="picker" value="F">
-        <input type="submit" name="picker" value="G">
-        <input type="submit" name="picker" value="H">
-        <input type="submit" name="picker" value="I">
-        <input type="submit" name="picker" value="J">
-        <input type="submit" name="picker" value="K">
-        <input type="submit" name="picker" value="L">
-        <input type="submit" name="picker" value="M">
-        <input type="submit" name="picker" value="N">
-        <input type="submit" name="picker" value="O">
-        <input type="submit" name="picker" value="P">
-        <input type="submit" name="picker" value="Q">
-        <input type="submit" name="picker" value="R">
-        <input type="submit" name="picker" value="S">
-        <input type="submit" name="picker" value="T">
-        <input type="submit" name="picker" value="U">
-        <input type="submit" name="picker" value="V">
-        <input type="submit" name="picker" value="W">
-        <input type="submit" name="picker" value="Y">
-        <input type="submit" name="picker" value="Z">
+        <!--<input type="submit" name="sort_by" value="" class="selected">-->
+        <input type="submit" name="sort_by" value="?">
+        <input type="submit" name="sort_by" value="A">
+        <input type="submit" name="sort_by" value="B">
+        <input type="submit" name="sort_by" value="C">
+        <input type="submit" name="sort_by" value="D">
+        <input type="submit" name="sort_by" value="E">
+        <input type="submit" name="sort_by" value="F">
+        <input type="submit" name="sort_by" value="G">
+        <input type="submit" name="sort_by" value="H">
+        <input type="submit" name="sort_by" value="I">
+        <input type="submit" name="sort_by" value="J">
+        <input type="submit" name="sort_by" value="K">
+        <input type="submit" name="sort_by" value="L">
+        <input type="submit" name="sort_by" value="M">
+        <input type="submit" name="sort_by" value="N">
+        <input type="submit" name="sort_by" value="O">
+        <input type="submit" name="sort_by" value="P">
+        <input type="submit" name="sort_by" value="Q">
+        <input type="submit" name="sort_by" value="R">
+        <input type="submit" name="sort_by" value="S">
+        <input type="submit" name="sort_by" value="T">
+        <input type="submit" name="sort_by" value="U">
+        <input type="submit" name="sort_by" value="V">
+        <input type="submit" name="sort_by" value="W">
+        <input type="submit" name="sort_by" value="Y">
+        <input type="submit" name="sort_by" value="Z">
     </form>
 
     <?php /*<small><a href="<?php echo $this->url('members', array('action'=>'add'));?>">Add New</a></small> */ ?>
@@ -78,10 +78,10 @@ $this->headTitle($title);
     <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
     <td><?php echo $this->escapeHtml($member->country);?></td>
     <td>
-        <a href="<?php echo $this->url('members',
-            array('action'=>'edit', 'id' => $member->id));?>">Edit</a>
-        <a href="<?php echo $this->url('members',
-            array('action'=>'delete', 'id' => $member->id));?>">Delete</a>
+        <a href="<?php echo $this->url('members/edit',
+            array('id' => $member->id));?>">Edit</a>
+        <a href="<?php echo $this->url('members/delete',
+            array('id' => $member->id));?>">Delete</a>
     </td>
 </tr>
 <?php endforeach; ?>
