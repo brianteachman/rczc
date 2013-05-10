@@ -141,7 +141,7 @@ echo $this->formRow($form->get('security')) . '<br>';
             <button type="submit" formaction="/members?sort_by=<?= $this->sort_by ?>">Return to list</button>
             <?php else: ?>
             <button type="submit" formaction="<?php echo $this->url('members',
-            array('action'=>'index'));?>">Return to list</button>
+            array('action'=>'index')) ?>">Return to list</button>
             <?php endif; ?>
 
             <button type="submit" formaction="<?php echo $this->url('members',

@@ -174,10 +174,10 @@ class MailController extends AbstractController
                      */
                     //return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
 
-                    //$message->sendMessageToGroup($email, $group_members);
+                    $message->sendMessageToGroup($email, $group_members);
                 } else {
                     //throw new \Exception('Shooting message to '.$email['to']);
-                    //$message->sendMessage($email, $member->email, $member->getFullName());
+                    $message->sendMessage($email, $member->email, $member->getFullName());
                 }
 
                 return $this->redirect()->toRoute('mail/sent', array('id' => $id));
@@ -187,8 +187,26 @@ class MailController extends AbstractController
                 return $this->redirect()->toRoute('mail/edit', array('id' => $id));
             }
         }
+        /* BEGIN This is not DRY */
+        $layout = $this->layout();
+        $layout->setTemplate('mailer/mail/sent');
+        if (isset($member)) {
+            $layout->recipient = $member->getFullName();
+        } else {
+            // ie, "remote members" or "local friends"
+            $layout->recipient = sprintf("%s %s", $message->location, $message->send_to);
 
-        return $this->makeView($email, 'mailer/mail/email-review', true);
+            if ($message->send_to != 'everyone') {
+                $layout->members_list = $this->getMemberTable()->getGroup(
+                    $message->send_to, 
+                    $message->location,
+                    true
+                );
+            }
+        }
+        /* END this is not DRY */
+        $layout->review = true;
+        return $this->makeView($email, 'mailer/mail/email-review');
     }
 
     public function editAction()
@@ -230,7 +248,7 @@ class MailController extends AbstractController
                 $message->exchangeArray($data);
                 $this->getMailTable()->saveMessage($message);
 
-                return $this->redirect()->toRoute('mail/review', array('action'=>'review', 'id'=>$id));
+                return $this->redirect()->toRoute('mail/review', array('id'=>$id));
             } else {
                 $view = new ViewModel(array('post' => $form->getMessages()));
                 $view->setTemplate('mailer/mail/member');
@@ -244,9 +262,7 @@ class MailController extends AbstractController
             $params = array('form'=>$form);
         }
 
-        $view = new ViewModel($params);
-        $view->setTemplate('mailer/mail/member');
-        return $view;
+        return $this->makeView($params, 'mailer/mail/member');
     }
 
     public function sentAction()
@@ -268,6 +284,7 @@ class MailController extends AbstractController
             return $this->redirect()->toRoute('mail/member');
         }
 
+        /* BEGIN This is not DRY */
         $layout = $this->layout();
         $layout->setTemplate('mailer/mail/sent');
         if (isset($member)) {
@@ -284,11 +301,15 @@ class MailController extends AbstractController
                 );
             }
         }
+        /* END This is not DRY */
 
-        // Create and return a view model for the retrieved article
-        $view = new ViewModel(array('message' => $message));
-        $view->setTemplate('email/group-email');
-        return $view;
+        if (isset($member)) {
+            $vars = array('message' => $message, 'member' => $member);
+        } else {
+            $vars = array('message' => $message);
+        }
+
+        return $this->makeView($vars, 'mailer/mail/email-review');
     }
 
     public function logsAction()
