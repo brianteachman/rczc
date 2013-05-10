@@ -172,17 +172,16 @@ class MailController extends AbstractController
                     /**
                      * Testing view script
                      */
-                    return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
+                    //return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
 
-                    $message->sendMessageToGroup($email, $group_members);
+                    //$message->sendMessageToGroup($email, $group_members);
                 } else {
                     //throw new \Exception('Shooting message to '.$email['to']);
-                    $message->sendMessage($email, $member->email, $member->getFullName());
+                    //$message->sendMessage($email, $member->email, $member->getFullName());
                 }
 
-                return $this->redirect()->toRoute('mail/default', array(
-                    'action' => 'sent'
-                ));
+                return $this->redirect()->toRoute('mail/sent', array('id' => $id));
+
             } else if ($post['action'] == 'Edit') {
 
                 return $this->redirect()->toRoute('mail/edit', array('id' => $id));
@@ -196,9 +195,7 @@ class MailController extends AbstractController
     {
         $id = (int) $this->params()->fromRoute('id', null);
         if (!$id) {
-            return $this->redirect()->toRoute('mail', array(
-                'action' => 'member'
-            ));
+            return $this->redirect()->toRoute('mail/member');
         }
 
         // Get the Member with the specified id.  An exception is thrown
@@ -210,9 +207,7 @@ class MailController extends AbstractController
             }
         }
         catch (\Exception $ex) {
-            return $this->redirect()->toRoute('mail', array(
-                'action' => 'member'
-            ));
+            return $this->redirect()->toRoute('mail/member');
         }
 
         $form  = new MessageForm();
@@ -256,7 +251,44 @@ class MailController extends AbstractController
 
     public function sentAction()
     {
-        //
+        $id = (int) $this->params()->fromRoute('id', null);
+        if (!$id) {
+            return $this->redirect()->toRoute('mail/member');
+        }
+
+        // Get the Member with the specified id.  An exception is thrown
+        // if it cannot be found, in which case go to the index page.
+        try {
+            $message = $this->getMailTable()->getMessage($id);
+            if (is_numeric($message->send_to)) {
+                $member = $this->getMemberTable()->getMember($message->send_to);
+            }
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('mail/member');
+        }
+
+        $layout = $this->layout();
+        $layout->setTemplate('mailer/mail/sent');
+        if (isset($member)) {
+            $layout->recipient = $member->getFullName();
+        } else {
+            // ie, "remote members" or "local friends"
+            $layout->recipient = sprintf("%s %s", $message->location, $message->send_to);
+
+            if ($message->send_to != 'everyone') {
+                $layout->members_list = $this->getMemberTable()->getGroup(
+                    $message->send_to, 
+                    $message->location,
+                    true
+                );
+            }
+        }
+
+        // Create and return a view model for the retrieved article
+        $view = new ViewModel(array('message' => $message));
+        $view->setTemplate('email/group-email');
+        return $view;
     }
 
     public function logsAction()

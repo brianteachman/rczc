@@ -55,6 +55,18 @@ return array(
                             ),
                         ),
                     ),
+                    'sent' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => '/sent[/:id]',
+                            'constraints' => array(
+                                'id'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action'     => 'sent',
+                            ),
+                        ),
+                    ),
                     'default' => array(
                         'type' => 'segment',
                         'options' => array(

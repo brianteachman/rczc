@@ -1,7 +1,35 @@
 <?php
 
 $title = 'Email Announcement has been sent';
-$this->headTitle($title);
-
 ?>
-<h2>The announcement from Red Cedar Zen Community has been emailed.</h2>
+<html>
+<head>
+    <?= $this->headTitle($title) ?>
+    <style>
+    h2 {
+        margin: 1em;
+    }
+    </style>
+</head>
+<body>
+    
+    <h2>The following message has been sent to: <?= $this->recipient ?></h2>
+
+    <?php if (isset($this->members_list)): ?>
+
+    <ul>
+    <?php foreach ($this->members_list as $member): ?>
+        <?= sprintf('<li style="margin-bottom:.5em">%s &lt;%s&gt;</li>', $member->getFullName(), $member->email) ?>
+    <?php endforeach; ?>
+    </ul>
+
+    <?php endif; ?>
+
+    <div id="The message">
+
+        <?= $this->content ?>
+
+    </div>
+
+</body>
+</html>
