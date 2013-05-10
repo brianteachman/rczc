@@ -7,6 +7,17 @@ use Zend\Db\Sql\Where;
 
 class MemberTable
 {
+    /**
+     * membership_type map
+     * 
+     * @var array
+     */
+    public $groups = array(
+        'mailing_list' => 1, 
+        'friends' => 2, 
+        'members' => 3, 
+    );
+
     protected $tableGateway;
 
     public function __construct(TableGateway $tableGateway)
@@ -48,34 +59,27 @@ class MemberTable
      */
     public function getGroup($group_name, $location=null, $email_exists=false)
     {
-        // membership_type map
-        $groups = array(
-            'mailing_list' => 1, 
-            'friends' => 2, 
-            'members' => 3, 
-        );
-
         $predicate = new  Where();
 
         switch ($group_name) {
             case 'members':
-                $predicate->expression('membership_type = ?', $groups['members']);
+                $predicate->equalTo('membership_type', $this->groups['members']);
                 break;
             
             case 'friends':
-                $predicate->expression('membership_type = ?', $groups['friends']);
+                $predicate->equalTo('membership_type', $this->groups['friends']);
                 break;
             
             case 'members_friends':
                 $predicate->NEST
-                          ->expression('membership_type = ?', $groups['friends'])
+                          ->equalTo('membership_type', $this->groups['friends'])
                           ->or
-                          ->expression('membership_type = ?', $groups['members'])
+                          ->equalTo('membership_type', $this->groups['members'])
                           ->UNNEST;
                 break;
             
             case 'mailing_list':
-                $predicate->expression('membership_type = ?', $groups['mailing_list']);
+                $predicate->equalTo('membership_type', $this->groups['mailing_list']);
                 break;
 
             case 'everyone':
@@ -112,7 +116,13 @@ class MemberTable
         if ($type == 'sangha') {
             $sel = array('list_in_directory' => 1, 'membership_type' => 3);
         } elseif ($type == 'members') {
-            $sel = array('membership_type' => 3);
+            $sel = new Where();
+            $sel->NEST
+                ->equalTo('membership_type', $this->groups['friends'])
+                ->or
+                ->equalTo('membership_type', $this->groups['members'])
+                ->UNNEST;
+            //$sel = array('membership_type' => 3);
         } else {
             //
         }
