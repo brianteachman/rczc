@@ -1,7 +1,7 @@
     <section id="PhoneListLabel">
         
         <!-- <div>Red Cedar Zen Community - Sangha Directory - printed 4/18/2013</div> -->
-        <div align='center'>Red Cedar Zen Community - <?= $this->title ?> - printed 4/18/2013</div>
+        <div align='center'>Red Cedar Zen Community - <?= $this->title ?> - printed <?= date("n/j/Y") ?></div>
         <!-- <div>Red Cedar Zen Community - Full Mailing List (Board use only) - printed 4/18/2013</div> -->
 
 
@@ -9,10 +9,12 @@
 
         <table border=0 width=100%>
             <tr>
-                <td><b>Name &amp; Sangha Role</b></td>
+                <td><b>Name</b> &amp; Sangha Role</td>
                 <td><b>Phone &amp; Email</b></td>
                 <td><b>Address</b></td>
+                <?php if ($this->type != 'sangha'): ?>
                 <td><b>Membership</b></td>
+                <?php endif; ?>
             </tr>
 
             <?php foreach ($this->members as $member): ?>
@@ -25,10 +27,10 @@
                 </td>
                 <td class="smalltext">
                     <?php if ($member->home_phone): ?>
-                    Home: <?= $member->home_phone ?>
+                    Home: <?= $member->home_phone ?> <br>
                     <?php endif; ?>
                     <?php if ($member->work_phone): ?>
-                    Work: <?= $member->work_phone ?>
+                    Work: <?= $member->work_phone ?> <br>
                     <?php endif; ?>
                     <?= $member->email ?>
                 </td>
@@ -38,9 +40,11 @@
                     <?= $member->country ?>
                     <?php endif; ?>
                 </td>
+                <?php if ($this->type != 'sangha'): ?>
                 <td class="smalltext">
                     <?= $member->membership_type == 3 ? 'Member': 'Friend'; ?>
                 </td>
+                <?php endif; ?>
             </tr>
 
             <?php endforeach; ?>

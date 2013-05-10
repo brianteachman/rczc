@@ -170,6 +170,7 @@ class MembersController extends AbstractActionController
         return new ViewModel(array(
             'members' => $members,
             'title' => $title,
+            'type' => $type,
         ));
     }
 
