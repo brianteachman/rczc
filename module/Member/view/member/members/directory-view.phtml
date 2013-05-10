@@ -9,7 +9,7 @@
 
         <table border=0 width=100%>
             <tr>
-                <td><b>Name</b></td>
+                <td><b>Name &amp; Sangha Role</b></td>
                 <td><b>Phone &amp; Email</b></td>
                 <td><b>Address</b></td>
                 <td><b>Membership</b></td>
@@ -19,8 +19,8 @@
             <tr style='page-break-inside : avoid;'>
                 <td>
                     <b><?= $member->getFullName() ?></b> <br>
-                    <?php if ($member->volunteer_interests): ?>
-                    Interested in: <?= $member->volunteer_interests ?>
+                    <?php if ($member->sangha_jobs): ?>
+                    <small><?= $member->sangha_jobs ?></small>
                     <?php endif; ?>
                 </td>
                 <td class="smalltext">

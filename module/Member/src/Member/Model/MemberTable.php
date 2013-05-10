@@ -110,7 +110,7 @@ class MemberTable
     {
         // "SELECT * FROM `members` WHERE {$sel};"
         if ($type == 'sangha') {
-            $sel = array('list_in_directory' => 1);
+            $sel = array('list_in_directory' => 1, 'membership_type' => 3);
         } elseif ($type == 'members') {
             $sel = array('membership_type' => 3);
         } else {
@@ -118,7 +118,7 @@ class MemberTable
         }
         $rowset = $this->tableGateway->select(function (Select $select) use ($sel) {
              $select->where($sel);
-             $select->order('last_name ASC');
+             $select->order(array('last_name ASC', 'first_name ASC'));
         });
         if (!$rowset) {
             throw new \Exception("Could not run the query {$q}.");

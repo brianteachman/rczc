@@ -155,6 +155,7 @@ class MembersController extends AbstractActionController
         if (isset($_POST['list_type'])) {
             $type = $_POST['list_type'];
             if ($type == 'sangha') {
+                // This should return `WHERE list_in_directory = 1`
                 $members = $this->getMemberTable()->getDirectoryMembers($type);
                 $title = "Sangha Directory - " . count($members) . ' members';
             } elseif ($type == 'members') {
