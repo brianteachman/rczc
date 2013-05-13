@@ -162,22 +162,14 @@ class MailController extends AbstractController
 
             if ($post['action'] == 'Send') {
                 if ($group) {
-                    //throw new \Exception('Group Mailing to '.$email['to']['group']);
                     $group_members = $this->getMemberTable()->getGroup(
                         $email['to']['group'], 
                         $message->location,
                         true
                     );
-
-                    /**
-                     * Testing view script
-                     */
-                    //return $this->makeView(array('post' => $group_members), 'mailer/mail/test');
-
-                    $message->sendMessageToGroup($email, $group_members);
+                    // $message->sendMessageToGroup($email, $group_members);
                 } else {
-                    //throw new \Exception('Shooting message to '.$email['to']);
-                    $message->sendMessage($email, $member->email, $member->getFullName());
+                    // $message->sendMessage($email, $member->email, $member->getFullName());
                 }
 
                 return $this->redirect()->toRoute('mail/sent', array('id' => $id));
