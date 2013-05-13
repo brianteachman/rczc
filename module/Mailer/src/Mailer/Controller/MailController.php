@@ -169,7 +169,7 @@ class MailController extends AbstractController
                     );
                     // $message->sendMessageToGroup($email, $group_members);
                 } else {
-                    // $message->sendMessage($email, $member->email, $member->getFullName());
+                    $message->sendMessage($email, $member->email, $member->getFullName());
                 }
 
                 return $this->redirect()->toRoute('mail/sent', array('id' => $id));
