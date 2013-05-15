@@ -167,7 +167,7 @@ class MailController extends AbstractController
                         $message->location,
                         true
                     );
-                    // $message->sendMessageToGroup($email, $group_members);
+                    $message->sendMessageToGroup($email, $group_members);
                 } else {
                     $message->sendMessage($email, $member->email, $member->getFullName());
                 }
