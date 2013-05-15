@@ -35,7 +35,7 @@ if (isset($this->members_list) && is_array($this->members_list)) {
 
     <?php else: ?>
 
-        <form action="" style="float:right;">
+        <form action="" method="post" style="float:right;">
             <button type="submit" formaction="/members" style="padding: 0.25em 0.5em;">&laquo; Return</button>
         </form>
         <h2>The following message has been sent to: <a title="<?= $list ?>"><?= $this->recipient ?></a></h2>

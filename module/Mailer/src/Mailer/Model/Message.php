@@ -248,10 +248,11 @@ class Message extends Email implements InputFilterAwareInterface
         ));
         $html_view->setTemplate('group-email');
 
-        $message->message_content = strip_tags($message->message_content);
+        $clean_text = clone $message;
+        $clean_text->message_content = strip_tags($clean_text->message_content);
         $text_view = new ViewModel(array(
             'to'=> $content['to'],
-            'message'=> $message,
+            'message'=> $clean_text,
             'member'=> $content['member'],
         ));
         $text_view->setTemplate('text-email');
