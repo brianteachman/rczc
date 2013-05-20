@@ -8,8 +8,9 @@ namespace Member\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Member\Model\Member;
+use Member\Model\SanghaRole;
 use Member\Form\MemberForm;
-use Member\Form\RolesForm;
+use Member\Form\SanghaRolesForm;
 
 /**
  * /members
@@ -197,32 +198,6 @@ class MembersController extends AbstractActionController
         }
     }
 
-    public function testMembersListAction()
-    {
-        $groups = array(
-            'member', 'friends', 
-            'members_friends', 
-            'mailing_list', 
-            'everyone'
-        );
-        try {
-            //$members = $this->getMemberTable()->getGroupOfMembers('everyone');
-            $members = $this->getMemberTable()->getGroupOfMembers($groups[1]);
-        } catch (Exception $e) {
-            throw new Exception('I don\'t know...');
-        }
-
-        $result = new \ArrayObject;
-        foreach ($members as $member) {
-            if ($member->email) {
-                $result->append($member);
-            }
-        }
-
-        //return array('members' => $members, 'group_list' => $groups[1]);
-        return array('members' => $result, 'group_list' => $groups[1]);
-    }
-
     public function rolesAction()
     {
         $members = $this->getMemberTable()->getMemberRoles();
@@ -233,7 +208,7 @@ class MembersController extends AbstractActionController
     {
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
-            throw new \Exception("What the fuck Batman!");
+            throw new \Exception("Member ID is nessecary to tie sangha roles to a member!");
         }
 
         // Get the Member with the specified id.  An exception is thrown
@@ -243,40 +218,34 @@ class MembersController extends AbstractActionController
         }
         catch (\Exception $ex) {
             // return $this->redirect()->toRoute('members/roles');
-            throw new \Exception("No member looking like that!");
+            throw new \Exception("No member with an ID of " . $id . " exists.");
         }
 
-        // return array('dump'=> $id, 'member'=> $member);
+        $role = new SanghaRole();
+        $role->exchangeArray($member->getArrayCopy());
 
-        $form  = new RolesForm();
-        $form->bind($member);
+        $form  = new SanghaRolesForm();
         $form->get('submit')->setAttribute('value', 'Save');
+        $form->bind($role);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             
             $form->setData($request->getPost());
 
-            if ( ! $form->isValid()) {
+            if ($form->isValid()) {
 
                 $filter = $form->getInputFilter();
                 $member->sangha_jobs = $filter->getRawValue('sangha_jobs');
-                $member->volunteer_interest = $filter->getRawValue('volunteer_interests');
+                $member->volunteer_interests = $filter->getRawValue('volunteer_interests');
                 $member->membership_notes = $filter->getRawValue('membership_notes');
-
-                // $test = array(
-                //     $member->sangha_jobs,
-                //     $member->volunteer_interest,
-                //     $member->membership_notes
-                // );
-                // return array('dump'=> $test, 'form'=>$form, 'member'=>$member);
 
                 $this->getMemberTable()->saveMember($member);
 
                 return $this->redirect()->toRoute('members/roles');
             } else {
-                //
-                return array('dump'=> $form->getMessages(), 'form'=>$form, 'member'=>$member);
+                // Log something
+                // return array('dump'=> $form->getMessages(), 'form'=>$form, 'member'=>$member);
             }
         }
         return array('form'=>$form, 'member'=>$member);

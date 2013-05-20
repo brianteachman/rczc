@@ -208,35 +208,4 @@ class MemberTable
         $this->tableGateway->delete(array('id' => $id));
     }
 
-    public function updateRole(Member $member)
-    {
-        $data = array(
-            'first_name' => $member->first_name,
-            'last_name' => $member->last_name,
-            'email' => $member->email,
-            'home_phone' => $member->home_phone,
-            'work_phone' => $member->work_phone,
-            'street' => $member->street,
-            'city' => $member->city,
-            'state' => $member->state,
-            'zipcode' => $member->zipcode,
-            'country' => $member->country,
-            'member_notes' => $member->member_notes,
-            'membership_type' => $member->membership_type,
-            'email_optin' => $member->email_optin,
-            'list_in_directory' => $member->list_in_directory,
-            'is_local' => $member->is_local,
-            'volunteer_interests' => $member->volunteer_interests,
-            'sangha_jobs' => $member->sangha_jobs,
-            'membership_renewal' => $member->membership_renewal,
-            'membership_notes' => $member->membership_notes,
-        );
-
-        $id = (int)$member->id;
-        if ($this->getMember($id)) {
-            $this->tableGateway->update($data, array('id' => $id));
-        } else {
-            throw new \InvalidArgumentException("Must be an existing member.");
-        }
-    }
 }

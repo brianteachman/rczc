@@ -1,11 +1,6 @@
 <?php
 namespace Member\Model;
 
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
-
 /**
  * MailManager\Model\Member entity
  * 
@@ -15,7 +10,7 @@ use Zend\InputFilter\InputFilterInterface;
  *
  * Don't put database access code into controller action methods.
  */
-class Member implements InputFilterAwareInterface
+class Member
 {
     // Member fields
     public $id;
@@ -35,12 +30,10 @@ class Member implements InputFilterAwareInterface
     public $membership_type;
     public $membership_renewal;
     public $sangha_jobs;
-    public $volunteer_interest;
+    public $volunteer_interests;
     public $email_optin;
     public $list_in_directory;
     public $membership_notes;
-
-    protected $inputFilter;
 
     public function getFullName()
     {
@@ -127,104 +120,5 @@ class Member implements InputFilterAwareInterface
     public function getArrayCopy()
     {
         return get_object_vars($this);
-    }
-
-    /**
-     * Zend\InputFilter\InputFilterAwareInterface contract method
-     * 
-     * @param InputFilterInterface $inputFilter
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Not used");
-    }
-
-    /**
-     * Zend\InputFilter\InputFilterAwareInterface contract method
-     */
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
-
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'id',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
-            )));
-
-            /**
-             * Between 1 and 32 characters
-             */
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'first_name',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 32,
-                        ),
-                    ),
-                ),
-            )));
-
-            /**
-             * Between 1 and 32 characters
-             */
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'last_name',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 32,
-                        ),
-                    ),
-                ),
-            )));
-
-            /**
-             * Between 1 and 70 characters
-             */
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'email',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 70,
-                        ),
-                    ),
-                ),
-            )));
-
-            $this->inputFilter = $inputFilter;
-        }
-
-        return $this->inputFilter;
     }
 }

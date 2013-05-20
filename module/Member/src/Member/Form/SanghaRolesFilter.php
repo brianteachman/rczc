@@ -10,7 +10,7 @@ use Zend\I18n\Validator\Alnum;
  * Member\Form\RolesFilter
  * 
  */
-class RolesFilter extends InputFilter
+class SanghaRolesFilter extends InputFilter
 {
     public function __construct()
     {
@@ -27,23 +27,23 @@ class RolesFilter extends InputFilter
 
         $jobs = new Input('sangha_jobs');
         $jobs->setRequired(true)
-             ->setAllowEmpty(true)
-             ->getValidatorChain()
-             ->addValidator(new Alnum(array('allowWhiteSpace' => true)));
+             ->setAllowEmpty(true);
+             // ->getValidatorChain()
+             // ->addValidator(new Alnum(array('allowWhiteSpace' => true)));
         $this->add($jobs);
 
         $interest = new Input('volunteer_interests');
         $interest->setRequired(true)
-                 ->setAllowEmpty(true)
-                 ->getValidatorChain()
-                 ->addValidator(new Alnum(array('allowWhiteSpace' => true)));
+                 ->setAllowEmpty(true);
+                 // ->getValidatorChain()
+                 // ->addValidator(new Alnum(array('allowWhiteSpace' => true)));
         $this->add($interest);
 
         $notes = new Input('membership_notes');
         $notes->setRequired(true)
-              ->setAllowEmpty(true)
-              ->getValidatorChain()
-              ->addValidator(new Alnum(array('allowWhiteSpace' => true)));
+              ->setAllowEmpty(true);
+              // ->getValidatorChain()
+              // ->addValidator(new Alnum(array('allowWhiteSpace' => true)));
         $this->add($notes);
     }
 }

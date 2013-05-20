@@ -81,7 +81,7 @@ class MemberFilter extends InputFilter
     /**
      * Zend\InputFilter\InputFilterAwareInterface contract method
      */
-    public function __construct()
+    public function pconstruct()
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
