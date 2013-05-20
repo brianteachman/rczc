@@ -9,6 +9,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Member\Model\Member;
 use Member\Form\MemberForm;
+use Member\Form\RolesForm;
 
 /**
  * /members
@@ -228,11 +229,11 @@ class MembersController extends AbstractActionController
         return array('members' => $members);
     }
 
-    public function roleEditAction()
+    public function rolesEditAction()
     {
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
-            return $this->redirect()->toRoute('members/roles');
+            throw new \Exception("What the fuck Batman!");
         }
 
         // Get the Member with the specified id.  An exception is thrown
@@ -241,22 +242,41 @@ class MembersController extends AbstractActionController
             $member = $this->getMemberTable()->getMember($id);
         }
         catch (\Exception $ex) {
-            return $this->redirect()->toRoute('members/roles');
+            // return $this->redirect()->toRoute('members/roles');
+            throw new \Exception("No member looking like that!");
         }
-        
-        $form  = new MemberForm();
+
+        // return array('dump'=> $id, 'member'=> $member);
+
+        $form  = new RolesForm();
         $form->bind($member);
         $form->get('submit')->setAttribute('value', 'Save');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setInputFilter($member->getInputFilter());
+            
             $form->setData($request->getPost());
 
-            if ($form->isValid()) {
-                $this->getMemberTable()->saveMember($form->getData());
+            if ( ! $form->isValid()) {
+
+                $filter = $form->getInputFilter();
+                $member->sangha_jobs = $filter->getRawValue('sangha_jobs');
+                $member->volunteer_interest = $filter->getRawValue('volunteer_interests');
+                $member->membership_notes = $filter->getRawValue('membership_notes');
+
+                // $test = array(
+                //     $member->sangha_jobs,
+                //     $member->volunteer_interest,
+                //     $member->membership_notes
+                // );
+                // return array('dump'=> $test, 'form'=>$form, 'member'=>$member);
+
+                $this->getMemberTable()->saveMember($member);
 
                 return $this->redirect()->toRoute('members/roles');
+            } else {
+                //
+                return array('dump'=> $form->getMessages(), 'form'=>$form, 'member'=>$member);
             }
         }
         return array('form'=>$form, 'member'=>$member);

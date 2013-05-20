@@ -3,6 +3,7 @@ namespace Member\Form;
 
 use Zend\Form\Element;
 use Zend\Form\Form;
+use Member\Form\MemberFilter;
 
 class MemberForm extends Form
 {
@@ -11,6 +12,8 @@ class MemberForm extends Form
         // we want to ignore the name passed
         parent::__construct('member');
         $this->setAttribute('method', 'post');
+        $this->setInputFilter(new MemberFilter());
+
         $this->add(array(
             'name' => 'id',
             'attributes' => array(

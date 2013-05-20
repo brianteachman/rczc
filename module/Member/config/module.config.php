@@ -86,7 +86,7 @@ return array(
                                 'id'     => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action'     => 'role-edit',
+                                'action'     => 'roles-edit',
                             ),
                         ),
                     ),
