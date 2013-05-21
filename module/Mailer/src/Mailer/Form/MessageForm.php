@@ -23,7 +23,7 @@ class MessageForm extends Form
             'attributes' => array(
                 'type'  => 'text',
                 'placeholder' => 'From the Red Cedar Zen Community',
-                'style' => "width:92%;"
+                // 'style' => "width:92%;"
             ),/*
             'options' => array(
                 'label' => 'First Name',
@@ -73,7 +73,10 @@ class MessageForm extends Form
                     '2013' => '2013',
                     '2012' => '2012',
                 ),
-            )
+            ),
+            'attributes' => array(
+                'class' => 'tax-year'
+            ),
         ));
 
         $this->add(array(
@@ -88,7 +91,10 @@ class MessageForm extends Form
                     'mailing_list' => 'Non-Members (on mailing list only) ',
                     'everyone' => 'Everyone (members, friends & non-members) ',
                 ),
-            )
+            ),
+            'attributes' => array(
+                'class' => 'members-group'
+            ),
         ));
 /*
         $this->add(array(
@@ -126,6 +132,7 @@ class MessageForm extends Form
             'attributes' => array(
                 'type'  => 'submit',
                 'value' => 'Send',
+                'class' => 'btn'
             ),
         ));
     }

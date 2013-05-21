@@ -16,6 +16,7 @@ if (isset($this->members_list) && is_array($this->members_list)) {
 <html>
 <head>
     <?= $this->headTitle($title) ?>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <style>
     h2 {
         margin: 1em;
@@ -28,15 +29,15 @@ if (isset($this->members_list) && is_array($this->members_list)) {
     <?php if ($this->review): ?>
 
         <form action="" method="post" style="float:right;">
-            <input type="submit" name="action" value="Edit" style="padding: 0.25em 0.5em;">
-            <input type="submit" name="action" value="Send" style="padding: 0.25em 0.5em;">
+            <input class="btn" type="submit" name="action" value="Edit"> &nbsp;
+            <input class="btn" type="submit" name="action" value="Send">
         </form>
         <h2>The following message will be sent to: <a title="<?= $list ?>"><?= $this->recipient ?></a></h2>
 
     <?php else: ?>
 
         <form action="" method="post" style="float:right;">
-            <button type="submit" formaction="/members" style="padding: 0.25em 0.5em;">&laquo; Return</button>
+            <button class="btn" type="submit" formaction="/members">&laquo; Return</button>
         </form>
         <h2>The following message has been sent to: <a title="<?= $list ?>"><?= $this->recipient ?></a></h2>
 

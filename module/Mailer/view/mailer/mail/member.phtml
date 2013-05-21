@@ -13,6 +13,35 @@ $this->headScript()->appendFile($this->basePath() . '/js/tinymce-v4.editor.js');
 
 <?php else: ?>
 
+<?php $this->headStyle()->captureStart() ?>
+input[type=text] {
+    padding: 0.4em 0 0.3em 0.4em;
+    width: 90%;
+}
+.message-label {
+    font-size:1.2em; 
+    font-weight:normal;
+    font-family: Baskerville,Georgia,'Times New Roman',Times,serif;
+    vertical-align: 3px;
+}
+select.tax-year { width: 5em; }
+select.members-group {
+    font-size: x-large;
+    height: 120%;
+    width: 300px;
+    1padding: 0.1em;
+}
+h2.inline {
+    display: inline;
+    vertical-align: -1px;
+}
+.radio-row label {
+    display: inline;
+    margin-left: 5px;
+}
+<?php $this->headStyle()->captureEnd();
+?>
+
 <?php
 $form = $this->form;
 //$form->setAttribute('action', $this->url('mail', array('action' => 'review')));
@@ -29,7 +58,7 @@ echo "\t" . $this->formRow($form->get('security')) . '<br>';
 
     <?php if ($this->member): ?>
         <div id="SendToMember">
-            <h1>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h1>
+            <h2>Send to: <?= $this->escapeHtml($this->member->first_name) ?> (<?= $this->escapeHtml($this->member->email) ?>)</h2>
             <?php /*<input type="hidden" name="send_to" value="<?= $this->member->id ?>">*/ ?>
         </div>
 
@@ -37,11 +66,12 @@ echo "\t" . $this->formRow($form->get('security')) . '<br>';
     <?php else: ?>
 
         <div id="SendToGroup">
-            <h1>Send to: <span style="font-size: large;"><?= $this->formRow($form->get('send_to')) ?></span></h1>
-            <br>
+            <h2 class="inline">Send to: </h2><?= $this->formRow($form->get('send_to')) ?>
+            <br><br>
                 
-            <em>Location:</em>
-                <?= $this->formRow($form->get('location')) ?>
+            <div class="radio-row">
+                <em>Select Locale:</em> <?= $this->formRow($form->get('location')) ?>
+            </div>
         </div>
 
     <?php endif; ?>
@@ -51,11 +81,11 @@ echo "\t" . $this->formRow($form->get('security')) . '<br>';
 
         <div ID="Message">
             <div class="subject">
-                <span style="font-size:1.2em; font-weight:normal;font-family: Baskerville,Georgia,'Times New Roman',Times,serif;">Subject: </span> <?= $this->formRow($form->get('message_subject')) ?>
+                <span class="message-label">Subject: </span> <?= $this->formRow($form->get('message_subject')) ?>
             </div>
             <br>
 
-            <span style="font-size:1.2em; font-weight:normal;font-family: Baskerville,Georgia,'Times New Roman',Times,serif;">Message: </span> <br>
+            <span class="message-label">Message: </span> <br>
             <?= $this->formRow($form->get('message_content')) ?>
             
             <br>
