@@ -5,24 +5,6 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <?php
 $form = $this->form;
-$form->setAttribute('action', $this->url('members', array('action' => 'add')));
-/*
-$form->prepare();
-
-echo $this->form()->openTag($form);
-echo $this->formHidden($form->get('id')) . '<br>';
-echo $this->formRow($form->get('first_name')) . '<br>';
-echo $this->formRow($form->get('email')) . '<br>';
-echo $this->formRow($form->get('home_phone')) . '<br>';
-echo $this->formRow($form->get('street')) . '<br>';
-echo $this->formRow($form->get('city')) . '<br>';
-echo $this->formRow($form->get('state')) . '<br>';
-echo $this->formRow($form->get('zipcode')) . '<br>';
-echo $this->formRow($form->get('country')) . '<br>';
-echo $this->formRow($form->get('comments')) . '<br>';
-echo $this->formSubmit($form->get('submit')) . '<br>';
-echo $this->form()->closeTag();
-*/
 $form->prepare();
 
 echo $this->form()->openTag($form);
@@ -146,7 +128,7 @@ echo $this->formRow($form->get('security')) . '<br>';
         </td>
         <td align="left" colSpan=2>
 
-            <button type="submit" formaction="<?php echo $this->url('members',
+            <button class="btn" type="submit" formaction="<?php echo $this->url('members',
             array('action'=>'index'));?>">Cancel</button>
 
         </td>

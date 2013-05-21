@@ -1,0 +1,8 @@
+<?php
+$title = 'View vars; using dump()';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php 
+
+echo var_dump($this->dump);

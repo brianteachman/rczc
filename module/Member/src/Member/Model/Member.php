@@ -101,15 +101,15 @@ class Member
         $this->city  = (isset($data['city'])) ? $data['city'] : null;
         $this->state  = (isset($data['state'])) ? $data['state'] : null;
         $this->zipcode  = (isset($data['zipcode'])) ? $data['zipcode'] : null;
-        $this->country  = (isset($data['country'])) ? $data['country'] : null;
+        $this->country  = (isset($data['country'])) ? $data['country'] : 'USA';
         $this->member_notes  = (isset($data['member_notes'])) ? $data['member_notes'] : null;
         // Membership fields
         $this->membership_type = (isset($data['membership_type'])) ? $data['membership_type'] : null;
-        $this->list_in_directory = (isset($data['list_in_directory'])) ? $data['list_in_directory'] : null;
+        $this->list_in_directory = (isset($data['list_in_directory'])) ? $data['list_in_directory'] : 0;
         $this->is_local = (isset($data['is_local'])) ? $data['is_local'] : null;
         $this->volunteer_interests = (isset($data['volunteer_interests'])) ? $data['volunteer_interests'] : null;
         $this->sangha_jobs = (isset($data['sangha_jobs'])) ? $data['sangha_jobs'] : null;
-        $this->email_optin = (isset($data['email_optin'])) ? $data['email_optin'] : null;
+        $this->email_optin = (isset($data['email_optin'])) ? $data['email_optin'] : 0;
         $this->membership_renewal = (isset($data['membership_renewal'])) ? $data['membership_renewal'] : null;
         $this->membership_notes = (isset($data['membership_notes'])) ? $data['membership_notes'] : null;
     }
@@ -120,5 +120,17 @@ class Member
     public function getArrayCopy()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * Used to update members role in the sangha
+     * 
+     * @param  array $data
+     */
+    public function updateRoles($data)
+    {
+        $this->volunteer_interests = (isset($data['volunteer_interests'])) ? $data['volunteer_interests'] : null;
+        $this->sangha_jobs = (isset($data['sangha_jobs'])) ? $data['sangha_jobs'] : null;
+        $this->membership_notes = (isset($data['membership_notes'])) ? $data['membership_notes'] : null;
     }
 }

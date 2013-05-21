@@ -7,13 +7,6 @@ $this->headTitle($title);
 
 <?php
 $form = $this->form;
-$form->setAttribute('action', $this->url(
-    'members',
-    array(
-        'action' => 'edit',
-        'id'     => $this->id,
-    )
-));
 $form->prepare();
 
 echo $this->form()->openTag($form);
@@ -138,14 +131,13 @@ echo $this->formRow($form->get('security')) . '<br>';
         <td align="left" colSpan=2>
 
             <?php if ($this->sort_by): ?>
-            <button type="submit" formaction="/members?sort_by=<?= $this->sort_by ?>">Return to list</button>
+            <button class="btn" type="submit" formaction="/members?sort_by=<?= $this->sort_by ?>">Return to list</button>
             <?php else: ?>
-            <button type="submit" formaction="<?php echo $this->url('members',
+            <button class="btn" type="submit" formaction="<?php echo $this->url('members',
             array('action'=>'index')) ?>">Return to list</button>
             <?php endif; ?>
-
-            <button type="submit" formaction="<?php echo $this->url('members',
-            array('action'=>'delete', 'id' => $this->id));?>">Delete</button>
+            
+            <a class="btn" href="<?= $this->url('members/delete', array('id' => $this->id)) ?>">Delete</a>
 
         </td>
     </tr>

@@ -78,9 +78,9 @@ $this->headTitle($title);
     <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
     <td><?php echo $this->escapeHtml($member->country);?></td>
     <td>
-        <a href="<?php echo $this->url('members/edit',
+        <a class="btn" href="<?php echo $this->url('members/edit',
             array('id' => $member->id));?>">Edit</a>
-        <a href="<?php echo $this->url('members/delete',
+        <a class="btn" href="<?php echo $this->url('members/delete',
             array('id' => $member->id));?>">Delete</a>
     </td>
 </tr>

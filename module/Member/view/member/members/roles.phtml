@@ -21,7 +21,7 @@ $this->headTitle($title);
     <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
     <td><?php echo $this->escapeHtml($member->sangha_jobs);?></td>
     <td>
-        <a href="<?php echo $this->url('members/role-edit',
+        <a class="btn" href="<?php echo $this->url('members/role-edit',
             array('id' => $member->id));?>">Edit</a>
     </td>
 </tr>

@@ -10,15 +10,12 @@ $this->headTitle($title);
     '<?php echo $this->escapeHtml($member->email); ?>'?
 </p>
 <?php
-$url = $this->url('members', array(
-    'action' => 'delete',
-    'id'     => $this->id,
-));
+$url = $this->url('members/delete', array('id' => $this->id));
 ?>
-<form action="<?php echo $url; ?>" method="post">
+<form action="<?= $url; ?>" method="post">
 <div>
-    <input type="hidden" name="id" value="<?php echo (int) $member->id; ?>" />
-    <input type="submit" name="del" value="Yes" />
-    <input type="submit" name="del" value="No" />
+    <input type="hidden" name="id" value="<?= (int) $member->id; ?>" />
+    <input class="btn" type="submit" name="del" value="Yes" />
+    <input class="btn" type="submit" name="del" value="No" />
 </div>
 </form>

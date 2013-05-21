@@ -5,7 +5,7 @@
 
 namespace Member\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use TWeb\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Member\Model\Member;
 use Member\Model\SanghaRole;
@@ -23,7 +23,7 @@ use Member\Form\SanghaRolesForm;
  * /members/directory-view
  * /members/labels
  */
-class MembersController extends AbstractActionController
+class MembersController extends AbstractController
 {
     protected $memberTable;
 
@@ -67,16 +67,20 @@ class MembersController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
+
             $member = new Member();
-            $form->setInputFilter($member->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
+
                 $member->exchangeArray($form->getData());
                 $this->getMemberTable()->saveMember($member);
 
-                // Redirect to list of members
                 return $this->redirect()->toRoute('members');
+
+            } else {
+                // return $this->makeView(array('dump'=>$form->getMessages()), 'test/dump');
+                // Log here
             }
         }
         return array('form' => $form);
@@ -114,13 +118,15 @@ class MembersController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setInputFilter($member->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $this->getMemberTable()->saveMember($form->getData());
 
+                $this->getMemberTable()->saveMember($form->getData());
                 return $this->redirect()->toRoute('members');
+            } else {
+                // return $this->makeView(array('dump'=>$form->getMessages()), 'test/dump');
+                // Log here
             }
         }
 
@@ -211,14 +217,12 @@ class MembersController extends AbstractActionController
             throw new \Exception("Member ID is nessecary to tie sangha roles to a member!");
         }
 
-        // Get the Member with the specified id.  An exception is thrown
-        // if it cannot be found, in which case go to the index page.
         try {
             $member = $this->getMemberTable()->getMember($id);
         }
         catch (\Exception $ex) {
-            // return $this->redirect()->toRoute('members/roles');
-            throw new \Exception("No member with an ID of " . $id . " exists.");
+            return $this->redirect()->toRoute('members/roles');
+            // throw new \Exception("No member with an ID of " . $id . " exists.");
         }
 
         $role = new SanghaRole();
@@ -234,6 +238,8 @@ class MembersController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
+
+                // $member->updateRoles($form->getData());
 
                 $filter = $form->getInputFilter();
                 $member->sangha_jobs = $filter->getRawValue('sangha_jobs');
