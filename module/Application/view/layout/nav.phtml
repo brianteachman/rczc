@@ -1,21 +1,28 @@
 <?php $this->headStyle()->captureStart() ?>
 #member_search {
+    height: 100%;
     1margin: .24em 1em 0 0;
-    1margin: 0;
+    1margin-bottom: 0;
     1vetical-align: middle;
 }
 #member_search input { padding: .5em; }
-#member_search input[type=text] {
-    1width: 250px;
+#member_search input[type=search],
+#member_search input[type=submit] {
+    margin: 0;
 }
 <?php $this->headStyle()->captureEnd() ?>
                 <div class="menu-header">
                     <ul id="menu-red-cedar-menu" class="menu">
+
                         <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item current-menu-ancestor current-menu-parent current_page_parent current_page_ancestor">
                             <a href="<?php $this->basePath() ?>/members">Members</a>
                             <ul class="sub-menu">
-                                <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item"><a href="<?php $this->basePath() ?>/members/add">Add member</a></li>
-                                <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item"><a href="<?php $this->basePath() ?>/members/roles">Member Roles</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item">
+                                    <a href="<?php $this->basePath() ?>/members/add">Add member</a>
+                                </li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item current_page_item">
+                                    <a href="<?php $this->basePath() ?>/members/roles">Member Roles</a>
+                                </li>
                             </ul>
                         </li>
 
@@ -45,8 +52,9 @@
                         </li>
                     </ul>
 
-                    <form action="/members" method="get" id="member_search" style="float:right;" >
+                    <form action="/members" method="get" id="member_search" style="float:right;">
                         <input type="search" name="search" placeholder="Member Search">
                         <input class="btn" type="submit" value="Search">
                     </form>
+
                 </div>

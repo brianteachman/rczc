@@ -5,6 +5,8 @@ $this->headTitle($title);
 <?php $this->headStyle()->captureStart() ?>
 .picker-bar > form {
     width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
 }
 .picker > input {
     1color: Black;
@@ -13,8 +15,11 @@ $this->headTitle($title);
     width: 30px;
 }
 .picker > input.selected {
-     color: White;
-     background-color: Gray;
+    color: White;
+    background-color: Gray;
+}
+.member-controls {
+    width: 125px;
 }
 <?php $this->headStyle()->captureEnd();
 ?>
@@ -24,65 +29,55 @@ $this->headTitle($title);
 <div class="picker-bar">
     <form id="Picker" class="picker">
         <!--<input type="submit" name="sort_by" value="" class="selected">-->
-        <input type="submit" name="sort_by" value="?">
-        <input type="submit" name="sort_by" value="A">
-        <input type="submit" name="sort_by" value="B">
-        <input type="submit" name="sort_by" value="C">
-        <input type="submit" name="sort_by" value="D">
-        <input type="submit" name="sort_by" value="E">
-        <input type="submit" name="sort_by" value="F">
-        <input type="submit" name="sort_by" value="G">
-        <input type="submit" name="sort_by" value="H">
-        <input type="submit" name="sort_by" value="I">
-        <input type="submit" name="sort_by" value="J">
-        <input type="submit" name="sort_by" value="K">
-        <input type="submit" name="sort_by" value="L">
-        <input type="submit" name="sort_by" value="M">
-        <input type="submit" name="sort_by" value="N">
-        <input type="submit" name="sort_by" value="O">
-        <input type="submit" name="sort_by" value="P">
-        <input type="submit" name="sort_by" value="Q">
-        <input type="submit" name="sort_by" value="R">
-        <input type="submit" name="sort_by" value="S">
-        <input type="submit" name="sort_by" value="T">
-        <input type="submit" name="sort_by" value="U">
-        <input type="submit" name="sort_by" value="V">
-        <input type="submit" name="sort_by" value="W">
-        <input type="submit" name="sort_by" value="Y">
-        <input type="submit" name="sort_by" value="Z">
+        <input class="btn" type="submit" name="sort_by" value="?">
+        <input class="btn" type="submit" name="sort_by" value="A">
+        <input class="btn" type="submit" name="sort_by" value="B">
+        <input class="btn" type="submit" name="sort_by" value="C">
+        <input class="btn" type="submit" name="sort_by" value="D">
+        <input class="btn" type="submit" name="sort_by" value="E">
+        <input class="btn" type="submit" name="sort_by" value="F">
+        <input class="btn" type="submit" name="sort_by" value="G">
+        <input class="btn" type="submit" name="sort_by" value="H">
+        <input class="btn" type="submit" name="sort_by" value="I">
+        <input class="btn" type="submit" name="sort_by" value="J">
+        <input class="btn" type="submit" name="sort_by" value="K">
+        <input class="btn" type="submit" name="sort_by" value="L">
+        <input class="btn" type="submit" name="sort_by" value="M">
+        <input class="btn" type="submit" name="sort_by" value="N">
+        <input class="btn" type="submit" name="sort_by" value="O">
+        <input class="btn" type="submit" name="sort_by" value="P">
+        <input class="btn" type="submit" name="sort_by" value="Q">
+        <input class="btn" type="submit" name="sort_by" value="R">
+        <input class="btn" type="submit" name="sort_by" value="S">
+        <input class="btn" type="submit" name="sort_by" value="T">
+        <input class="btn" type="submit" name="sort_by" value="U">
+        <input class="btn" type="submit" name="sort_by" value="V">
+        <input class="btn" type="submit" name="sort_by" value="W">
+        <input class="btn" type="submit" name="sort_by" value="Y">
+        <input class="btn" type="submit" name="sort_by" value="Z">
     </form>
 
     <?php /*<small><a href="<?php echo $this->url('members', array('action'=>'add'));?>">Add New</a></small> */ ?>
 </div>
 
 <table class="table">
-<?php /*
-<tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Phone #</th>
-    <th>Address</th>
-    <th>Country</th>
-    <th>&nbsp;</th>
-</tr>
-*/ ?>
-<?php foreach ($members as $member) : ?>
-<tr id="<?php echo $this->escapeHtml($member->id) ?>">
-    <td><?php echo $this->escapeHtml($member->getFullName()) ?></td>
-    <td>
-        <a href="<?php echo $this->url('mail/member', array('id'=>$member->id));?>"><?php echo $this->escapeHtml($member->email);?></a>
-    </td>
-    <td>
-        <?php echo $this->escapeHtml($member->home_phone);?>
-    </td>
-    <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
-    <td><?php echo $this->escapeHtml($member->country);?></td>
-    <td>
-        <a class="btn" href="<?php echo $this->url('members/edit',
-            array('id' => $member->id));?>">Edit</a>
-        <a class="btn" href="<?php echo $this->url('members/delete',
-            array('id' => $member->id));?>">Delete</a>
-    </td>
-</tr>
-<?php endforeach; ?>
+
+    <?php foreach ($members as $member) : ?>
+    <tr id="<?php echo $this->escapeHtml($member->id) ?>">
+        <td><?php echo $this->escapeHtml($member->getFullName()) ?></td>
+        <td>
+            <a href="<?php echo $this->url('mail/member', array('id'=>$member->id));?>"><?php echo $this->escapeHtml($member->email);?></a>
+        </td>
+        <td>
+            <?php echo $this->escapeHtml($member->home_phone);?>
+        </td>
+        <?php /* <td><?php echo $this->escapeHtml($member->getAddress());?></td> */ ?>
+        <!-- <td><?php echo $this->escapeHtml($member->country);?></td> -->
+        <td class="member-controls">
+            <a class="btn" href="<?php echo $this->url('members/edit', array('id' => $member->id));?>">Edit</a>
+            <a class="btn" href="<?php echo $this->url('members/delete', array('id' => $member->id));?>">Delete</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+
 </table>
